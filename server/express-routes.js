@@ -4,8 +4,8 @@ import bcrypt from 'bcrypt'
 const SALT_ROUNDS = 12;
 import jwt from 'jsonwebtoken';
 const JWT_KEY = "jfie@#j45eJJk%7jfn3ut454448rfjJ838@@@789";
-import { signupValidation } from '../shared/validation.js';
-import { loginValidation } from '../shared/validation.js';
+import { signupValidation } from './validation.js';
+import { loginValidation } from './validation.js';
 import { User } from './db.js';
 
 
