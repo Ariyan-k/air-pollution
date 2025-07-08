@@ -1,7 +1,7 @@
 import Inputbox from "./inputbox";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { signupValidation } from '../../../shared/validation'
+import { signupValidation } from '../authentication/validation'
 import { Link } from "react-router-dom";
 import { fetchSignup } from "../allfetchrequests/fetch";
 

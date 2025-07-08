@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react"
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom"
 import Inputbox from "./inputbox"
-import { loginValidation } from "../../../shared/validation";
+import { loginValidation } from "../authentication/validation";
 import { fetchLogin } from "../allfetchrequests/fetch";
 
 
