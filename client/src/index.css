@@ -1,0 +1,22 @@
+@import 'tailwindcss';
+
+.starBg {
+    background-image: url('/assets/stars.jpg');
+    background-repeat: no-repeat;
+    background-size:cover;
+    background-position: center;
+}
+
+.titleBg {
+    background-image: url('/assets/rocket.jpg');
+    background-repeat: no-repeat;
+    background-size:contain;
+    background-position: center;
+}
+
+.rocketSquareBg {
+    background-image: url('/assets/rocket-small.jpg');
+    background-repeat: no-repeat;
+    background-size:contain;
+    background-position: center;
+}
