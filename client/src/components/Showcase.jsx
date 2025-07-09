@@ -20,13 +20,13 @@ export default function Showcase() {
 
     return (
         <div className='
-            w-[80vw] h-[30vh]
-            lg:w-[50vw] lg:text-6xl md:text-5xl
+            w-[80vw] h-[40vh]
+            lg:w-[50vw] lg:text-6xl lg:pb-10 md:text-5xl
             flex justify-center items-center flex-col
             titleBg
-            text-2xl text-transparent font-bold bg-clip-text drop-shadow-[2px_1px_0_white]
+            text-4xl text-transparent font-bold bg-clip-text drop-shadow-[2px_1px_0_white]
         '>
-            ---This is---, 
+            This is, 
             
             <div className='h-[10vh] pt-3'><Typewriter text={currentWord} delay={typewriterDelay}/></div>
         </div>

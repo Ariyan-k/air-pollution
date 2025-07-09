@@ -10,7 +10,7 @@ import { User } from './db.js';
 
 
 const app = express();
-const port = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(cors());
@@ -38,6 +38,10 @@ function authMiddleware(req, res, next) {
 
 app.get('/Homepage', authMiddleware, (req, res) => {
     res.json({msg: "authOK"});
+});
+
+app.get('/', (req, res) => {
+    res.json({msg: "backend is active."});
 });
 
 app.post('/', async(req, res) => {
@@ -84,7 +88,7 @@ app.post('/signup', async (req, res) => {
     }
 });
 
-app.listen(port, '0.0.0.0', () => { 
-    console.log(`Backend live on port: ${port}`);
+app.listen(PORT, '0.0.0.0', () => { 
+    console.log(`Backend live on port: ${PORT}`);
 });
 
