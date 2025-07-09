@@ -13,8 +13,11 @@ function fetchSignup(username, email, password) {
         })
     })
         .then(res => res.json())
-        .then(data => data.msg)
-        .catch(err => console.error(err));
+        .then(data => data.msg || data.message || "Unknown error occurred")
+        .catch(err => {
+            console.error(err);
+            return "Network error";
+        });
 }
 
 function fetchLogin(username, password) {
@@ -29,8 +32,11 @@ function fetchLogin(username, password) {
         })
     })
         .then(res => res.json())
-        .then(data => data.msg)
-        .catch(err => console.error(err));
+        .then(data => data.msg || data.message || "Unknown error occurred")
+        .catch(err => {
+            console.error(err);
+            return "Network error";
+        });
 }
 
 function fetchHomepage(token) {
@@ -42,8 +48,11 @@ function fetchHomepage(token) {
         }
     })
         .then(res => res.json())
-        .then(data => data.msg)
-        .catch(err => console.error(err));
+        .then(data => data.msg || data.message || "Unknown error occurred")
+        .catch(err => {
+            console.error(err);
+            return "Network error";
+        });
 }
 
 export {

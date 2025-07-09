@@ -1,4 +1,6 @@
 @import 'tailwindcss';
+@import 'leaflet/dist/leaflet.css';
+
 
 .starBg {
     background-image: url('/assets/stars.jpg');
@@ -19,4 +21,8 @@
     background-repeat: no-repeat;
     background-size:contain;
     background-position: center;
+}
+
+.text-border {
+  -webkit-text-stroke: 1px white;
 }
