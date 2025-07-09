@@ -1,9 +1,53 @@
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import L, { map, marker } from 'leaflet'
+import 'leaflet/dist/leaflet.css'
+import { useEffect, useRef } from 'react'
 
-export default function Mapcontainer() {
+export default function Mapcontainer({lat, setLat, lng, setLng, msg}) {
+
+    const countRef = useRef(0);
+    useEffect(() => {
+        countRef.current+=1;
+    })
+
+    let markerRef = useRef(null);
+
+    //useRef will keep map safe from re-renders.
+    const mapRef = useRef(null);
+    
+    //this will set map only once, componet might get re-rendered and trigger this but the if condition will keep our map safe.
+    useEffect(() => {
+        
+        if (!mapRef.current) {
+            mapRef.current = L.map('map').setView([28.7041, 77.1025], 7);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(mapRef.current);
+        }
+        //else do nothing
+
+        if (markerRef.current !== null) {
+            mapRef.current.removeLayer(markerRef.current);
+            markerRef.current = null;
+        }
+        
+        markerRef.current = L.marker([lat, lng]);
+        markerRef.current.addTo(mapRef.current);
+
+        mapRef.current.on('click', (e) => {
+            if (markerRef.current) {
+                mapRef.current.removeLayer(markerRef.current);
+                markerRef.current = null;
+            }
+            let clickLat = e.latlng.lat;
+            let clickLng = e.latlng.lng;
+            markerRef.current = L.marker([clickLat, clickLng]);
+            markerRef.current.addTo(mapRef.current);
+        });
+    },[lat, lng]);
+    // this was hard ngl, but let's gooo it's finally done.
 
     return (
-        <div className="
+        <div id='map' className="
             w-[95vw] h-[40vh]
             lg:w-[50vw] lg:h-[80vh]
             bg-[rgb(205,205,205)] rounded-[5px] shadow-2xs shadow-gray-700 hover:shadow-2xl transition-all duration-500
@@ -11,17 +55,7 @@ export default function Mapcontainer() {
             text-black
 
         ">
-            <MapContainer center={[28.7041, 77.1025]} zoom={7} scrollWheelZoom={true} style={{ height: '100%', width: '100%' }}>
-                <TileLayer
-                    attribution='&copy; <a href="https://osm.org/copyright">OpenStreetMap</a>'
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                />
-                <Marker position={[28.7041, 77.1025]}>
-                    <Popup>
-                        AQI: xyz
-                    </Popup>
-                </Marker>
-            </MapContainer>
+            
         </div>
     )
 }

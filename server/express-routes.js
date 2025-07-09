@@ -7,6 +7,7 @@ const JWT_KEY = "jfie@#j45eJJk%7jfn3ut454448rfjJ838@@@789";
 import { signupValidation } from './validation.js';
 import { loginValidation } from './validation.js';
 import { User } from './db.js';
+import fetch from 'node-fetch'
 
 
 const app = express();
@@ -85,6 +86,28 @@ app.post('/signup', async (req, res) => {
     }
     else {
         res.json({msg: "Invalid input"});
+    }
+});
+
+app.get('/geocode', authMiddleware, async (req, res) => {
+    try {
+        const {city} = req.query;
+        const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(city)}`, {
+            headers: {
+                'User-Agent': 'airlytics-red.vercel.app (ariyansworkmail@gmail.com)'
+            }
+        });
+        const data = await response.json();
+
+        if (data.length > 0) {
+            const {lat, lon} = data[0];
+            return res.json({coordinates: {lat: parseFloat(lat), lng: parseFloat(lon)}});
+        }
+        else return res.json({msg: "City not found, Check for any invalid search."})
+    }
+    catch(err) {
+        console.log(err);
+        return res.json({msg: "Query not sent."});
     }
 });
 
