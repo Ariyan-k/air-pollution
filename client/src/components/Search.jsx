@@ -8,7 +8,7 @@ export default function Search() {
                 w-[75vw] h-[8vh] mt-5 m-0 p-3
                 lg:w-[40vw] lg:ml-5
                 flex justify-self-center
-                bg-[rgb(0,0,0)] border-2 border-[rgb(48,48,48)] rounded-[5px]
+                bg-[rgb(0,0,0)] rounded-[5px]
                 text-white
             "/>
             <button className="

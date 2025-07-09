@@ -62,7 +62,7 @@ export default function Loginform() {
                 className="
                     curson-pointer
                     w-[80vw] h-[6vh]
-                    md:w-[30vw]
+                    md:w-[40vw]
                     lg:w-[30vw]
                     p-5
                     flex justify-center items-center
