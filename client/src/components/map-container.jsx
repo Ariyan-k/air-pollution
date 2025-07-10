@@ -18,31 +18,45 @@ export default function Mapcontainer({lat, setLat, lng, setLng, msg}) {
     useEffect(() => {
         
         if (!mapRef.current) {
-            mapRef.current = L.map('map').setView([28.7041, 77.1025], 7);
+            mapRef.current = L.map('map')
+            mapRef.current.setView([lat, lng], 7);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; OpenStreetMap contributors'
             }).addTo(mapRef.current);
         }
         //else do nothing
 
-        if (markerRef.current !== null) {
-            mapRef.current.removeLayer(markerRef.current);
-            markerRef.current = null;
-        }
-        
-        markerRef.current = L.marker([lat, lng]);
-        markerRef.current.addTo(mapRef.current);
-
-        mapRef.current.on('click', (e) => {
-            if (markerRef.current) {
+        if (!msg) {
+            if (markerRef.current !== null) {
                 mapRef.current.removeLayer(markerRef.current);
                 markerRef.current = null;
             }
-            let clickLat = e.latlng.lat;
-            let clickLng = e.latlng.lng;
-            markerRef.current = L.marker([clickLat, clickLng]);
+            
+            markerRef.current = L.marker([lat, lng]);
             markerRef.current.addTo(mapRef.current);
-        });
+
+            //set the tile layer for dynamic coords from user's input through search.
+            mapRef.current.setView([lat, lng], 7);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(mapRef.current);
+
+            mapRef.current.on('click', (e) => {
+                if (markerRef.current) {
+                    mapRef.current.removeLayer(markerRef.current);
+                    markerRef.current = null;
+                }
+                let clickLat = e.latlng.lat;
+                let clickLng = e.latlng.lng;
+                markerRef.current = L.marker([clickLat, clickLng]);
+                markerRef.current.addTo(mapRef.current);
+            });
+        
+        }
+        // else if (msg || lat !== null){
+        //     alert("Couldn't find city, check for any typing erros.");
+        // }
+
     },[lat, lng]);
     // this was hard ngl, but let's gooo it's finally done.
 

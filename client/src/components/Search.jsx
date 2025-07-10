@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { fetchCoordinates } from "../allfetchrequests/fetch"
 
-export default function Search({lat, setLat, setLng, setMsg}) {
+export default function Search({setLat, setLng, setMsg}) {
 
     const [city, setCity] = useState("");
 
@@ -12,9 +12,14 @@ export default function Search({lat, setLat, setLng, setMsg}) {
     async function handleClick(e) {
         e.preventDefault();
         const {coordinates} = await fetchCoordinates(city);
-        setLat(coordinates.lat);
-        setLng(coordinates.lng);
-        setMsg(coordinates.msg);
+        try {
+            setLat(coordinates.lat);
+            setLng(coordinates.lng);
+            setMsg(coordinates.msg);
+        }
+        catch(err) {
+            //do nothing
+        }
     } 
 
     return (
