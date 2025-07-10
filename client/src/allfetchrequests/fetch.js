@@ -55,8 +55,23 @@ function fetchHomepage(token) {
         });
 }
 
+function fetchCoordinates(city) {
+    const token = localStorage.getItem('Authorization').split(" ")[1];
+    return fetch(`${BASE_URL}/geocode?city=${city}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    })
+        .then(res => res.json())
+        .then(data => data)
+        .catch(err => console.error(err));
+}
+
 export {
     fetchSignup,
     fetchLogin,
-    fetchHomepage
+    fetchHomepage,
+    fetchCoordinates
 }

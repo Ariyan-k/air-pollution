@@ -7,9 +7,18 @@ import { fetchHomepage } from "../allfetchrequests/fetch";
 import { useEffect, useState } from "react";
 import { isValid } from "zod";
 
+
+
 export default function Homepage() {
 
+    const [lat, setLat] = useState(28.7041);
+    const [lng, setLng] = useState(77.1025);
+    const [msg, setMsg] = useState({});
     const [isValidAuth, setIsValidAuth] = useState("");
+
+    useEffect(() => {
+    }, [lat, lng, msg]);
+
     useEffect(() => {
         const authHeader = localStorage.getItem('Authorization');
         if (authHeader) {
@@ -31,7 +40,7 @@ export default function Homepage() {
             flex-col
             lg:flex lg:flex-row
         ">
-            <Mapcontainer/>
+            <Mapcontainer lat={lat} setLat={setLat} lng={lng} setLng={setLng} msg={msg}/>
             <div className="
                 w-auto h-[40vh]
                 lg:w-auto lg:h-[80vh] 
@@ -39,7 +48,7 @@ export default function Homepage() {
             ">
                 <Result/>
                 <Userquerydisplay/>
-                <Search/>
+                <Search lat={lat} setLat={setLat} setLng={setLng} setMsg={setMsg}/>
             </div>
         </div>
     )
