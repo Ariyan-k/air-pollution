@@ -1,15 +1,17 @@
-export default function Userquerydisplay () {
-    return(
-        <div className="
-            w-[95vw] h-[10vh]
-            lg:w-[50vw] lg:h-[10vh]
-            m-5 mb-0
-            rounded-[5px] shadow-2xs hover:drop-shadow-2xl transition-all duration-500
-            flex justify-center items-center overflow-hidden
-            lg:self-end
-            text-black
-        ">
-            <p className="text-[13px] text-red-700">USER REQUEST: CITY-DELHI | TIME-CURRENTTIME</p>
-        </div>
-    )
+export default function Userquerydisplay() {
+  return (
+    <div className="
+      w-[95vw] lg:w-[50vw]
+      px-6 py-5 m-5 mb-0
+      rounded-md border border-neutral-700
+      bg-black
+      shadow-md hover:shadow-xl transition-all duration-300
+      flex justify-start items-center
+      text-lg lg:text-2xl font-mono tracking-widest
+      text-red-400
+      backdrop-blur-sm
+    ">
+      USER REQUEST → CITY: <span className="mx-2 text-white font-bold">DELHI</span> | TIME: <span className="ml-2 text-white font-bold">1220 HRS</span>
+    </div>
+  );
 }

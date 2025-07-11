@@ -32,86 +32,87 @@ function authMiddleware(req, res, next) {
         const payload = jwt.verify(token, JWT_KEY);
         next();
     }
-    catch(err) {
-        return res.json({msg: "Invalid or expired token, Login to continue"});
+    catch (err) {
+        return res.json({ msg: "Invalid or expired token, Login to continue" });
     }
 }
 
 app.get('/Homepage', authMiddleware, (req, res) => {
-    res.json({msg: "authOK"});
+    res.json({ msg: "authOK" });
 });
 
 app.get('/', (req, res) => {
-    res.json({msg: "backend is active."});
+    res.json({ msg: "backend is active." });
 });
 
-app.post('/', async(req, res) => {
-    const {username, password} = req.body;
-    const isValid = loginValidation.safeParse({username, password});
+app.post('/', async (req, res) => {
+    const { username, password } = req.body;
+    const isValid = loginValidation.safeParse({ username, password });
     if (isValid.success) {
-        const isUser = await User.findOne({username: username});
+        const isUser = await User.findOne({ username: username });
         if (isUser) {
             const passAuth = await bcrypt.compare(password, isUser.password);
-            if(passAuth) {
-                const token =jwt.sign({userId: isUser._id}, JWT_KEY, {expiresIn: '1h'});
-                return res.json({msg: token})
+            if (passAuth) {
+                const token = jwt.sign({ userId: isUser._id }, JWT_KEY, { expiresIn: '1h' });
+                return res.json({ msg: token });
             }
-            else return res.json({msg: "Incorrect password"});
+            else return res.json({ msg: "Incorrect password" });
         }
-        else return res.json({msg: "User does not exist, sign up to continue"});
+        else return res.json({ msg: "User does not exist, sign up to continue" });
     }
     else {
-        return res.json({msg: "Invalid input"});
-    } 
+        return res.json({ msg: "Invalid input" });
+    }
 });
 
 app.post('/signup', async (req, res) => {
-    const {username, email, password} = req.body;
-    const isValid = signupValidation.safeParse({username, email, password});
+    const { username, email, password } = req.body;
+    const isValid = signupValidation.safeParse({ username, email, password });
     if (isValid.success) {
         const isUser = await User.findOne({
             $or: [
-                {username: username},
-                {email: email}
+                { username: username },
+                { email: email }
             ]
         })
-        if(isUser) return res.json({msg: "Username or email already exists"});
+        if (isUser) return res.json({ msg: "Username or email already exists" });
         else {
             const hashedPass = await bcrypt.hash(password, SALT_ROUNDS);
-            const userData = {username, email, password: hashedPass};
+            const userData = { username, email, password: hashedPass };
             const newUser = new User(userData);
             await newUser.save();
-            res.json({msg: "Account created successfully, redirecting to login page."});
+            res.json({ msg: "Account created successfully, redirecting to login page." });
         }
     }
     else {
-        res.json({msg: "Invalid input"});
+        res.json({ msg: "Invalid input" });
     }
 });
 
 app.get('/geocode', authMiddleware, async (req, res) => {
     try {
-        const {city} = req.query;
+        const { city } = req.query;
         const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(city)}`, {
-            headers: {
+            headers:
+            {
                 'User-Agent': 'airlytics-red.vercel.app (ariyansworkmail@gmail.com)'
             }
         });
         const data = await response.json();
 
         if (data.length > 0) {
-            const {lat, lon} = data[0];
-            return res.json({coordinates: {lat: parseFloat(lat), lng: parseFloat(lon)}});
+            const { lat, lon } = data[0];
+            return res.json({ coordinates: { lat: parseFloat(lat), lng: parseFloat(lon) } });
         }
-        else return res.json({msg: "City not found, Check for any invalid search."})
+        else return res.json({ msg: "City not found, Check for any invalid search." })
     }
-    catch(err) {
+    catch (err) {
         console.log(err);
-        return res.json({msg: "Query not sent."});
+        return res.json({ msg: "Query not sent." });
     }
 });
 
-app.listen(PORT, '0.0.0.0', () => { 
+app.listen(PORT, '0.0.0.0', () => {
     console.log(`Backend live on port: ${PORT}`);
 });
 
