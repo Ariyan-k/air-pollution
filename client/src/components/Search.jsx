@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { fetchCoordinates } from "../allfetchrequests/fetch"
 
-export default function Search({setLat, setLng, setMsg}) {
+export default function Search({setLat, setLng}) {
 
     const [city, setCity] = useState("");
 
@@ -15,10 +15,9 @@ export default function Search({setLat, setLng, setMsg}) {
         try {
             setLat(coordinates.lat);
             setLng(coordinates.lng);
-            setMsg(coordinates.msg);
         }
         catch(err) {
-            //do nothing
+            alert("Invalid search.")
         }
     } 
 

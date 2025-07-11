@@ -40,7 +40,7 @@ export default function Homepage() {
             flex-col
             lg:flex lg:flex-row
         ">
-            <Mapcontainer lat={lat} setLat={setLat} lng={lng} setLng={setLng} msg={msg}/>
+            <Mapcontainer lat={lat} lng={lng}/>
             <div className="
                 w-auto h-[40vh]
                 lg:w-auto lg:h-[80vh] 
@@ -48,7 +48,7 @@ export default function Homepage() {
             ">
                 <Result/>
                 <Userquerydisplay/>
-                <Search lat={lat} setLat={setLat} setLng={setLng} setMsg={setMsg}/>
+                <Search setLat={setLat} setLng={setLng}/>
             </div>
         </div>
     )

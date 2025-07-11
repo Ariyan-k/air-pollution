@@ -2,7 +2,7 @@ import L, { map, marker } from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { useEffect, useRef } from 'react'
 
-export default function Mapcontainer({lat, setLat, lng, setLng, msg}) {
+export default function Mapcontainer({lat, lng}) {
 
     const countRef = useRef(0);
     useEffect(() => {
@@ -13,52 +13,36 @@ export default function Mapcontainer({lat, setLat, lng, setLng, msg}) {
 
     //useRef will keep map safe from re-renders.
     const mapRef = useRef(null);
-    
-    //this will set map only once, componet might get re-rendered and trigger this but the if condition will keep our map safe.
-    useEffect(() => {
-        
-        if (!mapRef.current) {
-            mapRef.current = L.map('map')
-            mapRef.current.setView([lat, lng], 7);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; OpenStreetMap contributors'
-            }).addTo(mapRef.current);
-        }
-        //else do nothing
 
-        if (!msg) {
-            if (markerRef.current !== null) {
+    useEffect(() => {
+        mapRef.current = L.map('map');
+
+        mapRef.current.on('click', (e) => {
+            const clickLat = e.latlng.lat;
+            const clickLng = e.latlng.lng;
+            if (markerRef.current) {
                 mapRef.current.removeLayer(markerRef.current);
                 markerRef.current = null;
             }
-            
-            markerRef.current = L.marker([lat, lng]);
+            markerRef.current = L.marker([clickLat, clickLng]);
             markerRef.current.addTo(mapRef.current);
+        });
+    }, []);
 
-            //set the tile layer for dynamic coords from user's input through search.
-            mapRef.current.setView([lat, lng], 7);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; OpenStreetMap contributors'
-            }).addTo(mapRef.current);
+    useEffect(() => {
+        mapRef.current.setView([lat, lng], 7);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(mapRef.current);
 
-            mapRef.current.on('click', (e) => {
-                if (markerRef.current) {
-                    mapRef.current.removeLayer(markerRef.current);
-                    markerRef.current = null;
-                }
-                let clickLat = e.latlng.lat;
-                let clickLng = e.latlng.lng;
-                markerRef.current = L.marker([clickLat, clickLng]);
-                markerRef.current.addTo(mapRef.current);
-            });
-        
+        if (markerRef.current !== null) {
+            mapRef.current.removeLayer(markerRef.current);
+            markerRef.current = null;
         }
-        // else if (msg || lat !== null){
-        //     alert("Couldn't find city, check for any typing erros.");
-        // }
+        markerRef.current = L.marker([lat, lng]);
+        markerRef.current.addTo(mapRef.current);
 
-    },[lat, lng]);
-    // this was hard ngl, but let's gooo it's finally done.
+    }, [lat, lng]);
 
     return (
         <div id='map' className="
