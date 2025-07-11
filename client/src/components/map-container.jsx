@@ -52,8 +52,6 @@ export default function Mapcontainer({lat, lng}) {
             flex justify-center items-center overflow-hidden
             text-black
 
-        ">
-            
-        </div>
+        "></div>
     )
 }
