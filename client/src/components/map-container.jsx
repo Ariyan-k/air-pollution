@@ -1,13 +1,8 @@
-import L, { map, marker } from 'leaflet'
+import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { useEffect, useRef } from 'react'
 
 export default function Mapcontainer({lat, lng}) {
-
-    const countRef = useRef(0);
-    useEffect(() => {
-        countRef.current+=1;
-    })
 
     let markerRef = useRef(null);
 

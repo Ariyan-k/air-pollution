@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { fetchCoordinates } from "../allfetchrequests/fetch"
 
 export default function Search({setLat, setLng}) {
@@ -34,8 +34,8 @@ export default function Search({setLat, setLng}) {
             "/>
             <button className="
                 w-[20vw] h-[8vh]
-                md:text-2xl
-                lg:w-[10vw] lg:text-3xl
+                text-xl
+                lg:w-[10vw]
                 flex justify-center items-center
                 font-bold text-transparent bg-clip-text bg-gradient-to-br from-red-900 via-purple-400 to-amber-300
                 hover:drop-shadow-xl hover:drop-shadow-[rgb(84,84,84)]

@@ -1,13 +1,9 @@
 import Result from "../components/result";
 import Mapcontainer from "../components/map-container";
-import Title from "../components/title";
 import Userquerydisplay from "../components/User-query-display";
 import Search from "../components/Search";
 import { fetchHomepage } from "../allfetchrequests/fetch";
 import { useEffect, useState } from "react";
-import { isValid } from "zod";
-
-
 
 export default function Homepage() {
 
@@ -15,9 +11,6 @@ export default function Homepage() {
     const [lng, setLng] = useState(77.1025);
     const [msg, setMsg] = useState({});
     const [isValidAuth, setIsValidAuth] = useState("");
-
-    useEffect(() => {
-    }, [lat, lng, msg]);
 
     useEffect(() => {
         const authHeader = localStorage.getItem('Authorization');
