@@ -2,22 +2,21 @@ export default function Result() {
   return (
     <div className="
       w-[95vw] lg:w-[50vw]
-      h-auto lg:h-[60vh]
-      mt-5 lg:mt-0 ml-5
-      rounded-xl border border-neutral-700
+      h-[25vh] lg:h-[60vh]
+      rounded-[5px] border border-neutral-700 lg:border-none
       bg-black
       shadow-lg hover:shadow-2xl transition-all duration-500
-      flex flex-col justify-between gap-4 p-6
+      flex flex-col justify-between gap-y-4 p-4
       text-white
       backdrop-blur-sm
       overflow-auto
     ">
       <div>
-        <h2 className="text-3xl text-blue-400 lg:text-4xl font-semibold tracking-wide">
+        <h2 className="text-2xl text-blue-400 lg:text-4xl font-semibold tracking-wide">
           Region: Delhi
         </h2>
 
-        <h4 className="text-green-400 text-xl lg:text-2xl mt-4 font-semibold">
+        <h4 className="text-green-400 text-[17px] lg:text-2xl mt-4 font-semibold">
           Data Source: AI Forecast + Live Sensors
         </h4>
 
@@ -37,7 +36,7 @@ export default function Result() {
         </div>
       </div>
 
-      <p className="text-lg lg:text-xl text-neutral-500 mt-4">
+      <p className="text-[15px] lg:text-xl text-neutral-500 mt-4">
         Results based on: predictive algorithm
       </p>
     </div>

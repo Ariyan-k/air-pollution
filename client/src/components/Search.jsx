@@ -20,43 +20,46 @@ export default function Search({ setLat, setLng }) {
   }
 
   return (
-    <div className="w-[95vw] lg:w-[50vw] ml-5 py-4 flex justify-center items-center">
+    <div className="w-[95vw] lg:w-[50vw] flex justify-center items-center">
       <form noValidate={true} className="flex w-full space-x-3">
-        <input
-          onChange={handleChange}
-          value={city}
-          type="text"
-          placeholder="Search city"
-          className="
-            flex-grow
-            h-[7vh]
-            px-5
-            text-lg md:text-xl lg:text-2xl
-            bg-black border border-neutral-700
-            rounded-md
-            text-white placeholder:text-neutral-500
-            focus:outline-none focus:ring-1 focus:ring-amber-400
-            transition-all duration-300 ease-in-out
-          "
-        />
-        <button
-          id="searchButton"
-          onClick={handleClick}
-          className="
-            px-6
-            h-[7vh]
-            text-lg md:text-xl lg:text-2xl
-            text-red-400
-            font-bold uppercase tracking-wider
-            bg-clip-text
-            border border-neutral-700 rounded-md
-            hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.2)]
-            transition-all duration-300
-            whitespace-nowrap
-          "
-        >
-          Search
-        </button>
+        <div className="w-[65vw] h-[7vh] p-0.5 rounded-[5px] bg-gradient-to-tr from-indigo-600 via-pink-600 to-purple-600">
+            <input
+            onChange={handleChange}
+            value={city}
+            type="text"
+            placeholder="Search city ..."
+            className="
+                flex-grow
+                w-full h-full
+                p-5
+                text-[12px] md:text-xl lg:text-2xl
+                bg-black 
+                rounded-[5px]
+                text-white placeholder:text-neutral-500
+            "
+            />
+        </div>
+        <div className="h-[7vh] w-[30vw] p-0.5 rounded-[5px] bg-gradient-to-tr from-indigo-600 via-pink-600 to-purple-600">
+            <div className="h-full w-full bg-black rounded-[5px]">
+                <button
+                id="searchButton"
+                onClick={handleClick}
+                className="
+                    p-4
+                    w-full h-full
+                    flex justify-center items-center
+                    text-[12px] md:text-xl lg:text-2xl
+                    font-bold uppercase tracking-wider
+                    rounded-[5px]
+                    bg-gradient-to-tr from-indigo-600 via-pink-600 to-purple-600
+                    bg-clip-text text-transparent
+                    whitespace-nowrap
+                "
+                >
+                Search
+                </button>
+            </div>
+        </div>
       </form>
     </div>
   );

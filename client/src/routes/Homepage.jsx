@@ -36,7 +36,7 @@ export default function Homepage() {
     return (
         <div className="
             lg:p-5
-            flex justify-center items-center overflow-hidden
+            flex justify-center items-center overflow-hidden gap-y-5 lg:gap-x-5 
             flex-col
             lg:flex lg:flex-row
         ">
@@ -46,9 +46,11 @@ export default function Homepage() {
                 lg:w-auto lg:h-[80vh] 
                 flex flex-col items-baseline
             ">
-                <Result/>
-                <Userquerydisplay/>
-                <Search setLat={setLat} setLng={setLng}/>
+                <div className="h-[80vh] flex flex-col justify-between">
+                    <Result/>
+                    <Userquerydisplay/>
+                    <Search setLat={setLat} setLng={setLng}/>
+                </div>
             </div>
         </div>
     )

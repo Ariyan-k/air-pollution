@@ -1,13 +1,12 @@
 export default function Userquerydisplay() {
   return (
     <div className="
-      w-[95vw] lg:w-[50vw]
-      px-6 py-5 m-5 mb-0
-      rounded-md border border-neutral-700
+      w-[95vw] lg:w-[50vw] h-5
+      p-2
       bg-black
       shadow-md hover:shadow-xl transition-all duration-300
-      flex justify-start items-center
-      text-lg lg:text-2xl font-mono tracking-widest
+      flex justify-center items-center
+      text-[10px] md:text-[15px] lg:text-[15px] font-mono tracking-widest
       text-red-400
       backdrop-blur-sm
     ">
