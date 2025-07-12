@@ -1,13 +1,14 @@
 import express from 'express';
 import cors from 'cors';
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcrypt';
 const SALT_ROUNDS = 12;
 import jwt from 'jsonwebtoken';
 const JWT_KEY = "jfie@#j45eJJk%7jfn3ut454448rfjJ838@@@789";
 import { signupValidation } from './validation.js';
 import { loginValidation } from './validation.js';
 import { User } from './db.js';
-import fetch from 'node-fetch'
+import fetch from 'node-fetch';
+import fs from 'fs';
 
 
 const app = express();
@@ -110,6 +111,12 @@ app.get('/geocode', authMiddleware, async (req, res) => {
         console.log(err);
         return res.json({ msg: "Query not sent." });
     }
+});
+
+app.get('/heatdata', authMiddleware, (req, res) => {
+    const heatpointsData = JSON.parse(fs.readFileSync('./heatdata/heatpointsdata.json', 'utf-8'));
+    if (heatpointsData) res.json(heatpointsData);
+    else res.json({msg: "Server error"});
 });
 
 app.listen(PORT, '0.0.0.0', () => {

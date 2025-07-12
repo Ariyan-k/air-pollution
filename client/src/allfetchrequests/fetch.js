@@ -60,9 +60,24 @@ function fetchCoordinates(city) {
         .catch(err => console.error(err));
 }
 
+function fetchHeatdata() {
+    const token = localStorage.getItem('Authorization').split(" ")[1];
+    return fetch(`${BASE_URL}/heatdata`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    })
+        .then(res => res.json())
+        .then(heatdata => heatdata)
+        .catch(err => console.error(err));
+}
+
 export {
     fetchSignup,
     fetchLogin,
     fetchHomepage,
-    fetchCoordinates
+    fetchCoordinates,
+    fetchHeatdata
 }
