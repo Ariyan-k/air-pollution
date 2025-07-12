@@ -1,13 +1,14 @@
-import L from 'leaflet'
-import 'leaflet/dist/leaflet.css'
-import { useEffect, useRef } from 'react'
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+import 'leaflet.heat';
+import { useEffect, useRef } from 'react';
+import { fetchHeatdata } from '../allfetchrequests/fetch';
 
-export default function Mapcontainer({lat, lng}) {
+export default function Mapcontainer({ lat, lng }) {
 
     let markerRef = useRef(null);
-
-    //useRef will keep map safe from re-renders.
     const mapRef = useRef(null);
+    const heatlayerRef = useRef(null);
 
     useEffect(() => {
         mapRef.current = L.map('map');
@@ -22,10 +23,45 @@ export default function Mapcontainer({lat, lng}) {
             markerRef.current = L.marker([clickLat, clickLng]);
             markerRef.current.addTo(mapRef.current);
         });
+
     }, []);
 
+    //for heatlayer
+    useEffect(() => {
+        async function wrapper() {
+            const heatdata = await fetchHeatdata();
+            const heatpoints = heatdata.heatpoints;
+            if(heatlayerRef.current) {
+                map.removeLayer(heatlayerRef.current);
+                heatlayerRef.current = null;
+            }
+            heatlayerRef.current = L.heatLayer(heatpoints, {
+                radius: 30,
+                blur: 30,
+                maxZoom: 6,
+                minOpacity: 0.4,
+                gradient: {
+                    0.2: 'blue',
+                    0.4: 'lime',
+                    0.6: 'orange',
+                    0.8: 'red',
+                    1.0: 'maroon',
+                },
+            });
+
+            mapRef.current.on('zoomend', () => {
+                const zoom = mapRef.current.getZoom();
+                if (zoom <= 4) mapRef.current.removeLayer(heatlayerRef.current);
+                else heatlayerRef.current.addTo(mapRef.current);
+            });
+        }
+        wrapper();
+    }, []);
+
+    //for search
     useEffect(() => {
         mapRef.current.setView([lat, lng], 7);
+
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(mapRef.current);
@@ -40,13 +76,15 @@ export default function Mapcontainer({lat, lng}) {
     }, [lat, lng]);
 
     return (
-        <div id='map' className="
-            w-[95vw] h-[40vh]
-            lg:w-[50vw] lg:h-[80vh]
-            bg-[rgb(205,205,205)] rounded-[5px] shadow-2xs shadow-gray-700 hover:shadow-2xl transition-all duration-500
-            flex justify-center items-center overflow-hidden
-            text-black
-
-        "></div>
-    )
+        <div
+            id='map'
+            className="
+                w-[95vw] h-[40vh]
+                lg:w-[90vw] lg:h-[80vh]
+                bg-white rounded-md shadow-xl
+                flex justify-center items-center overflow-hidden
+                text-black
+            "
+        ></div>
+    );
 }

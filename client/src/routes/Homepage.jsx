@@ -16,20 +16,20 @@ export default function Homepage() {
         const authHeader = localStorage.getItem('Authorization');
         if (authHeader) {
             async function wrapper() {
-            const token = authHeader.split(" ")[1];
-            const data = await fetchHomepage(token);
-            setIsValidAuth(data);
+                const token = authHeader.split(" ")[1];
+                const data = await fetchHomepage(token);
+                setIsValidAuth(data);
             }
             wrapper();
         }
         else setIsValidAuth("Error: Bad request.");
-    }, [isValidAuth]);
+    }, []);
 
     if (isValidAuth === "authOK")
     return (
         <div className="
             lg:p-5
-            flex justify-center items-center overflow-hidden
+            flex justify-center items-center overflow-hidden gap-y-5 lg:gap-x-5 
             flex-col
             lg:flex lg:flex-row
         ">
@@ -39,9 +39,11 @@ export default function Homepage() {
                 lg:w-auto lg:h-[80vh] 
                 flex flex-col items-baseline
             ">
-                <Result/>
-                <Userquerydisplay/>
-                <Search setLat={setLat} setLng={setLng}/>
+                <div className="h-[80vh] flex flex-col justify-between">
+                    <Result/>
+                    <Userquerydisplay/>
+                    <Search setLat={setLat} setLng={setLng}/>
+                </div>
             </div>
         </div>
     )

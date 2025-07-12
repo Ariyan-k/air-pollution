@@ -1,50 +1,66 @@
-import { useState } from "react";
-import { fetchCoordinates } from "../allfetchrequests/fetch"
+import { useEffect, useState } from "react";
+import { fetchCoordinates } from "../allfetchrequests/fetch";
 
-export default function Search({setLat, setLng}) {
+export default function Search({ setLat, setLng }) {
+  const [city, setCity] = useState("");
 
-    const [city, setCity] = useState("");
+  function handleChange(e) {
+    setCity(e.target.value);
+  }
 
-    function handleChange(e) {
-        setCity(e.target.value);
+  async function handleClick(e) {
+    e.preventDefault();
+    const { coordinates } = await fetchCoordinates(city);
+    try {
+      setLat(coordinates.lat);
+      setLng(coordinates.lng);
+    } catch (err) {
+      alert("Invalid search.");
     }
+  }
 
-    async function handleClick(e) {
-        e.preventDefault();
-        const {coordinates} = await fetchCoordinates(city);
-        try {
-            setLat(coordinates.lat);
-            setLng(coordinates.lng);
-        }
-        catch(err) {
-            alert("Invalid search.")
-        }
-    } 
-
-    return (
-        <div className="
-            flex flex-row justify-between
-        ">
-        <form noValidate={true} className="flex lg:ml-5 justify-center items-center space-x-2">
-            <input onChange={handleChange} value={city} type="text" placeholder="Search City ..." className="
-                w-[75vw] h-[8vh] p-3
-                lg:w-[40vw]
-                bg-[rgb(0,0,0)] rounded-[5px]
-                text-white
-            "/>
-            <button className="
-                w-[20vw] h-[8vh]
-                text-xl
-                lg:w-[10vw]
-                flex justify-center items-center
-                font-bold text-transparent bg-clip-text bg-gradient-to-br from-red-900 via-purple-400 to-amber-300
-                hover:drop-shadow-xl hover:drop-shadow-[rgb(84,84,84)]
-                transition-all duration-500
-            " 
-            id="searchButton" onClick={handleClick}>
-                Search
-            </button>
-        </form>
+  return (
+    <div className="w-[95vw] lg:w-[50vw] flex justify-center items-center">
+      <form noValidate={true} className="flex w-full space-x-3">
+        <div className="w-[65vw] h-[7vh] p-0.5 rounded-[5px] bg-gradient-to-tr from-indigo-600 via-pink-600 to-purple-600">
+            <input
+            onChange={handleChange}
+            value={city}
+            type="text"
+            placeholder="Search city ..."
+            className="
+                flex-grow
+                w-full h-full
+                p-5
+                text-[12px] md:text-xl lg:text-2xl
+                bg-black 
+                rounded-[5px]
+                text-white placeholder:text-neutral-500
+            "
+            />
         </div>
-    )
+        <div className="h-[7vh] w-[30vw] p-0.5 rounded-[5px] bg-gradient-to-tr from-indigo-600 via-pink-600 to-purple-600">
+            <div className="h-full w-full bg-black rounded-[5px]">
+                <button
+                id="searchButton"
+                onClick={handleClick}
+                className="
+                    p-4
+                    w-full h-full
+                    flex justify-center items-center
+                    text-[12px] md:text-xl lg:text-2xl
+                    font-bold uppercase tracking-wider
+                    rounded-[5px]
+                    bg-gradient-to-tr from-indigo-600 via-pink-600 to-purple-600
+                    bg-clip-text text-transparent
+                    whitespace-nowrap
+                "
+                >
+                Search
+                </button>
+            </div>
+        </div>
+      </form>
+    </div>
+  );
 }
