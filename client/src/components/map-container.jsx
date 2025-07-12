@@ -1,10 +1,15 @@
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet.heat';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { fetchHeatdata } from '../allfetchrequests/fetch';
+import AboutHeatmap from './aboutHeatmap';
 
 export default function Mapcontainer({ lat, lng }) {
+
+    //date time to be passed as props
+    const [date, setDate] = useState(null);
+    const [time, setTime] = useState(null);
 
     let markerRef = useRef(null);
     const mapRef = useRef(null);
@@ -30,6 +35,8 @@ export default function Mapcontainer({ lat, lng }) {
     useEffect(() => {
         async function wrapper() {
             const heatdata = await fetchHeatdata();
+            setDate(heatdata.date);
+            setTime(heatdata.time);
             const heatpoints = heatdata.heatpoints;
             if(heatlayerRef.current) {
                 map.removeLayer(heatlayerRef.current);
@@ -76,15 +83,19 @@ export default function Mapcontainer({ lat, lng }) {
     }, [lat, lng]);
 
     return (
-        <div
-            id='map'
-            className="
-                w-[95vw] h-[40vh]
-                lg:w-[90vw] lg:h-[80vh]
-                bg-white rounded-md shadow-xl
-                flex justify-center items-center overflow-hidden
-                text-black
-            "
-        ></div>
+        <>
+            <div
+                id='map'
+                className="
+                    w-[95vw] h-[40vh]
+                    lg:w-[90vw] lg:h-[80vh]
+                    bg-white rounded-md shadow-xl relative
+                    text-black
+                "
+            >
+                <AboutHeatmap date={date} time={time}/>
+            </div>
+            
+        </>
     );
 }
