@@ -25,13 +25,19 @@ async function convertDataForLeaflet() {
 
         const aqi = result.aqi;
         let intensity;
-        if (aqi <= 50) intensity = 0.2;
-        else if (aqi > 50 && aqi <= 100) intensity = 0.3;
-        else if (aqi > 100 && aqi <= 200) intensity = 0.5;
-        else if (aqi > 200 && aqi <= 300) intensity = 0.7;
-        else if (aqi > 300 && aqi <= 400) intensity = 0.9;
-        else if (aqi > 400) intensity = 1.0;
+        if (aqi <= 50) intensity = 0.1;
+        else if (aqi <= 75) intensity = 0.2;
+        else if (aqi <= 100) intensity = 0.3;
+        else if (aqi <= 125) intensity = 0.4;
+        else if (aqi <= 150) intensity = 0.5;
+        else if (aqi <= 200) intensity = 0.6;
+        else if (aqi <= 250) intensity = 0.7;
+        else if (aqi <= 325) intensity = 0.8;
+        else if (aqi <= 350) intensity = 0.9;
+        else intensity = 1.0;
         heatpointsdata.heatpoints.push([lat, lng, intensity]);
+
+        console.log(`${i+1} entity converted.`);
     }
 
     heatpointsdata.date = date;
@@ -59,7 +65,6 @@ async function callOpenweather() {
                 const localData = await fetch(`http://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lng}&appid=${key}`);
                 if (localData.ok) {
                     const parsedLocalData = await localData.json();
-                    console.log(parsedLocalData);
                     aqidata.data.push(parsedLocalData);
                     console.log(`(${j+1}) entity added`);
                 }

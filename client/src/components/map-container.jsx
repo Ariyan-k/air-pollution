@@ -48,12 +48,16 @@ export default function Mapcontainer({ lat, lng }) {
                 maxZoom: 6,
                 minOpacity: 0.4,
                 gradient: {
-                    0.2: '#add8e6',
-                    0.3: '#00ff00',
-                    0.5: '#ffff00',
-                    0.7: '#ffa500', 
+                    0.1: '#00bfff', 
+                    0.2: '#00ffff',  
+                    0.3: '#00ff80',   
+                    0.4: '#7fff00', 
+                    0.5: '#ffff00', 
+                    0.6: '#ffbf00',   
+                    0.7: '#ff8000',   
+                    0.8: '#ff4000',   
                     0.9: '#ff0000',
-                    1.0: '#800000', 
+                    1.0: '#800000'   
                 },
             });
 
