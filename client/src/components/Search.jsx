@@ -1,15 +1,20 @@
 import { useEffect, useState } from "react";
 import { fetchCoordinates } from "../allfetchrequests/fetch";
 
-export default function Search({ setLat, setLng }) {
+export default function Search({ setLat, setLng, setReqCity, setReqTime }) {
   const [city, setCity] = useState("");
 
   function handleChange(e) {
     setCity(e.target.value);
   }
+  
+  const now = new Date();
 
   async function handleClick(e) {
     e.preventDefault();
+    setReqCity(city);
+    const time = `${now.getHours()}:${now.getMinutes()}`;
+    setReqTime(time);
     const { coordinates } = await fetchCoordinates(city);
     try {
       setLat(coordinates.lat);

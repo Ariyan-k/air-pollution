@@ -9,7 +9,8 @@ export default function Homepage() {
 
     const [lat, setLat] = useState(28.7041);
     const [lng, setLng] = useState(77.1025);
-    const [msg, setMsg] = useState({});
+    const [reqCity, setReqCity] = useState("(city)"); //to set city in displays like result and user-query when user clicks on search button.
+    const [reqTime, setReqTime] = useState("00:00"); //to set time of request in user request display.
     const [isValidAuth, setIsValidAuth] = useState("");
 
     useEffect(() => {
@@ -40,9 +41,9 @@ export default function Homepage() {
                 flex flex-col items-baseline
             ">
                 <div className="h-[80vh] flex flex-col justify-between">
-                    <Result/>
-                    <Userquerydisplay/>
-                    <Search setLat={setLat} setLng={setLng}/>
+                    <Result reqCity={reqCity}/>
+                    <Userquerydisplay reqCity={reqCity} reqTime={reqTime}/>
+                    <Search setLat={setLat} setLng={setLng} setReqCity={setReqCity} setReqTime={setReqTime}/>
                 </div>
             </div>
         </div>

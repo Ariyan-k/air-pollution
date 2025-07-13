@@ -1,4 +1,5 @@
-export default function Userquerydisplay() {
+export default function Userquerydisplay({reqCity, reqTime}) {
+
   return (
     <div className="
       w-[95vw] lg:w-[50vw] h-5
@@ -10,7 +11,7 @@ export default function Userquerydisplay() {
       text-red-400
       backdrop-blur-sm
     ">
-      USER REQUEST → CITY: <span className="mx-2 text-white font-bold">DELHI</span> | TIME: <span className="ml-2 text-white font-bold">1220 HRS</span>
+      REQUEST → CITY: <span className="mx-2 text-white font-bold">{reqCity.toUpperCase()}</span> | TIME: <span className="ml-2 text-white font-bold">{reqTime} HRS</span>
     </div>
   );
 }

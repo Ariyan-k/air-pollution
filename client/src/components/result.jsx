@@ -1,4 +1,4 @@
-export default function Result() {
+export default function Result({reqCity}) {
   return (
     <div className="
       w-[95vw] lg:w-[50vw]
@@ -13,7 +13,7 @@ export default function Result() {
     ">
       <div>
         <h2 className="text-2xl text-blue-400 lg:text-4xl font-semibold tracking-wide">
-          Region: Delhi
+          Region: {reqCity.toUpperCase()}
         </h2>
 
         <h4 className="text-green-400 text-[17px] lg:text-2xl mt-4 font-semibold">
