@@ -9,7 +9,7 @@ export default function Title () {
             titleBg
             text-3xl
             lg:text-6xl lg:pb-5
-            w-[100vw] h-auto p-5 pb-10
+            w-[100vw] h-auto pt-3 pb-7
             flex justify-center
             text-transparent bg-clip-text bg-gradient-to-br from-orange-600 via-amber-900 to-amber-950
             font-extrabold font-sans 

@@ -61,7 +61,10 @@ export default function Mapcontainer({ lat, lng }) {
                 },
             });
 
+            heatlayerRef.current.addTo(mapRef.current);
+
             mapRef.current.on('zoomend', () => {
+                mapRef.current.removeLayer(heatlayerRef.current);
                 const zoom = mapRef.current.getZoom();
                 if (zoom <= 4) mapRef.current.removeLayer(heatlayerRef.current);
                 else heatlayerRef.current.addTo(mapRef.current);
@@ -92,7 +95,7 @@ export default function Mapcontainer({ lat, lng }) {
             <div
                 id='map'
                 className="
-                    w-[95vw] h-[40vh]
+                    w-[95vw] h-[50vh]
                     lg:w-[90vw] lg:h-[80vh]
                     bg-white rounded-md shadow-xl relative
                     text-black
