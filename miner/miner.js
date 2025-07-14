@@ -14,6 +14,7 @@ aqidata.data = [];
 async function convertDataForLeaflet() {
     let heatpointsdata = JSON.parse(fs.readFileSync('./heatpointsdata.json', 'utf-8'));
     heatpointsdata.heatpoints = [];
+    heatpointsdata.respectiveAqi = [];
 
     console.log("\n\n\nStarting conversion...\n\n\n");
     for (let i = 0; i < aqidata.data.length; i++) {
@@ -35,7 +36,7 @@ async function convertDataForLeaflet() {
         else if (aqi <= 325) intensity = 0.8;
         else if (aqi <= 350) intensity = 0.9;
         else intensity = 1.0;
-        
+
         heatpointsdata.heatpoints.push([lat, lng, intensity]);
         heatpointsdata.respectiveAqi.push(aqi);
 
