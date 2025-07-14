@@ -28,7 +28,6 @@ export default function Mapcontainer({ lat, lng }) {
                 markerRef.current = null;
             }
             markerRef.current = L.marker([clickLat, clickLng]);
-            markerRef.current.addTo(mapRef.current);
         });
 
     }, []);
@@ -71,18 +70,14 @@ export default function Mapcontainer({ lat, lng }) {
                 const zoom = mapRef.current.getZoom();
                 if (zoom <= 4) {
                     mapRef.current.removeLayer(heatlayerRef.current);
-                    // mapRef.current.removeLayer(markerLayer);
                 }
                 else {
                     heatlayerRef.current.addTo(mapRef.current);
-                    // markerLayer.addTo(mapRef.current);
                 }
             });
 
             //bind aqi markers - 
             const markers = [];
-            console.log(heatdata.respectiveAqi[1]);
-            console.log(heatdata.heatpoints[1][0], heatdata.heatpoints[1][1]);
             for (let i = 0; i < heatdata.respectiveAqi.length; i++) {
                 const marker = L.marker([heatdata.heatpoints[i][0], heatdata.heatpoints[i][1]], {opacity: 0})
                     .bindTooltip(`AQI: ${heatdata.respectiveAqi[i]}`, { permanent: true, direction: 'center', className: 'my-label' })
