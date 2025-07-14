@@ -95,7 +95,7 @@ export default function Mapcontainer({ lat, lng }) {
             <div
                 id='map'
                 className="
-                    w-[95vw] h-[50vh]
+                    w-[95vw] h-[55vh]
                     lg:w-[90vw] lg:h-[80vh]
                     bg-white rounded-md shadow-xl relative
                     text-black

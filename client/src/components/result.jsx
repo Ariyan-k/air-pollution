@@ -2,7 +2,7 @@ export default function Result({reqCity}) {
   return (
     <div className="
       w-[95vw] lg:w-[50vw]
-      h-[28vh] lg:h-[68vh]
+      h-[35vh] lg:h-[68vh]
       rounded-[5px] border border-neutral-700 lg:border-none
       bg-black
       shadow-lg hover:shadow-2xl transition-all duration-500

@@ -40,7 +40,7 @@ export default function Homepage() {
                 lg:w-auto lg:h-[80vh] 
                 flex flex-col items-baseline
             ">
-                <div className="h-[35vh] lg:h-[80vh] flex justify-between flex-col space-y-2">
+                <div className="h-full lg:h-[80vh] flex justify-between flex-col space-y-3">
                     <Result reqCity={reqCity}/>
                     <Userquerydisplay reqCity={reqCity} reqTime={reqTime}/>
                     <Search setLat={setLat} setLng={setLng} setReqCity={setReqCity} setReqTime={setReqTime}/>

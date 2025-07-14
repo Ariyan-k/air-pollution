@@ -25,7 +25,7 @@ export default function Search({ setLat, setLng, setReqCity, setReqTime }) {
   }
 
   return (
-    <div className="w-[95vw] lg:w-[50vw] flex justify-center items-center">
+    <div className="w-[95vw] lg:w-[50vw] flex justify-center items-center pb-2">
       <form noValidate={true} className="flex w-full space-x-3">
         <div className="w-[65vw] h-[6vh] p-[1px] rounded-[5px] bg-gradient-to-br from-red-500 via-orange-500 to-red-500">
             <input
