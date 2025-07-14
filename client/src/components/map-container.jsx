@@ -5,10 +5,6 @@ import { useEffect, useRef, useState } from 'react';
 import { fetchHeatdata } from '../allfetchrequests/fetch';
 import AboutHeatmap from './aboutHeatmap';
 
-import 'leaflet.markercluster'; 
-import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
-import 'leaflet.markercluster/dist/MarkerCluster.css';
-
 
 export default function Mapcontainer({ lat, lng }) {
 
