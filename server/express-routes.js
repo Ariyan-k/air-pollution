@@ -1,9 +1,11 @@
+import dotenv from 'dotenv'
+define.config();
 import express from 'express';
 import cors from 'cors';
 import bcrypt from 'bcrypt';
-const SALT_ROUNDS = 12;
+const SALT_ROUNDS = process.env.SALT_ROUNDS;
 import jwt from 'jsonwebtoken';
-const JWT_KEY = "jfie@#j45eJJk%7jfn3ut454448rfjJ838@@@789";
+const JWT_KEY = process.env.JWT_KEY;
 import { signupValidation } from './validation.js';
 import { loginValidation } from './validation.js';
 import { User } from './db.js';

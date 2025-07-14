@@ -1,7 +1,9 @@
 import mongoose from "mongoose";
 import { required } from "zod/v4-mini";
+import dotenv from 'dotenv'
+dotenv.config();
 
-mongoose.connect('mongodb+srv://ariyan1khan34:sorcerer82supreme999@airlytics-cluster.7rzu0wv.mongodb.net/?retryWrites=true&w=majority&appName=airlytics-cluster/airlytics')
+mongoose.connect(process.env.MONGODB_URI)
     .then(() => console.log("MongoDB connected!"))
     .catch(console.error);
 
