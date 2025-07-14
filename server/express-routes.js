@@ -1,5 +1,5 @@
 import dotenv from 'dotenv'
-define.config();
+dotenv.config();
 import express from 'express';
 import cors from 'cors';
 import bcrypt from 'bcrypt';
