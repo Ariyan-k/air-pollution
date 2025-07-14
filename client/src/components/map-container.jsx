@@ -1,9 +1,14 @@
-import L from 'leaflet';
+import L, { map } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet.heat';
 import { useEffect, useRef, useState } from 'react';
 import { fetchHeatdata } from '../allfetchrequests/fetch';
 import AboutHeatmap from './aboutHeatmap';
+
+import 'leaflet.markercluster'; 
+import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
+import 'leaflet.markercluster/dist/MarkerCluster.css';
+
 
 export default function Mapcontainer({ lat, lng }) {
 
@@ -14,6 +19,7 @@ export default function Mapcontainer({ lat, lng }) {
     let markerRef = useRef(null);
     const mapRef = useRef(null);
     const heatlayerRef = useRef(null);
+    const popupRef = useRef(null);
 
     useEffect(() => {
         mapRef.current = L.map('map');
@@ -38,6 +44,7 @@ export default function Mapcontainer({ lat, lng }) {
             setDate(heatdata.date);
             setTime(heatdata.time);
             const heatpoints = heatdata.heatpoints;
+            const aqi = heatdata.respectiveAqi; //an array of aqis.
             if(heatlayerRef.current) {
                 map.removeLayer(heatlayerRef.current);
                 heatlayerRef.current = null;
@@ -66,9 +73,29 @@ export default function Mapcontainer({ lat, lng }) {
             mapRef.current.on('zoomend', () => {
                 mapRef.current.removeLayer(heatlayerRef.current);
                 const zoom = mapRef.current.getZoom();
-                if (zoom <= 4) mapRef.current.removeLayer(heatlayerRef.current);
-                else heatlayerRef.current.addTo(mapRef.current);
+                if (zoom <= 4) {
+                    mapRef.current.removeLayer(heatlayerRef.current);
+                    // mapRef.current.removeLayer(markerLayer);
+                }
+                else {
+                    heatlayerRef.current.addTo(mapRef.current);
+                    // markerLayer.addTo(mapRef.current);
+                }
             });
+
+            //bind aqi markers - 
+            const markers = [];
+            console.log(heatdata.respectiveAqi[1]);
+            console.log(heatdata.heatpoints[1][0], heatdata.heatpoints[1][1]);
+            for (let i = 0; i < heatdata.respectiveAqi.length; i++) {
+                const marker = L.marker([heatdata.heatpoints[i][0], heatdata.heatpoints[i][1]], {opacity: 0})
+                    .bindTooltip(`AQI: ${heatdata.respectiveAqi[i]}`, { permanent: true, direction: 'center', className: 'my-label' })
+                markers.push(marker);
+            }
+            const markerLayer = L.markerClusterGroup();
+            markerLayer.addLayers(markers);
+            markerLayer.addTo(mapRef.current);
+
         }
         wrapper();
     }, []);

@@ -35,7 +35,9 @@ async function convertDataForLeaflet() {
         else if (aqi <= 325) intensity = 0.8;
         else if (aqi <= 350) intensity = 0.9;
         else intensity = 1.0;
+        
         heatpointsdata.heatpoints.push([lat, lng, intensity]);
+        heatpointsdata.respectiveAqi.push(aqi);
 
         console.log(`${i+1} entity converted.`);
     }
