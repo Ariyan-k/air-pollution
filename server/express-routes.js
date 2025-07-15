@@ -3,7 +3,7 @@ dotenv.config();
 import express from 'express';
 import cors from 'cors';
 import bcrypt from 'bcrypt';
-const SALT_ROUNDS = process.env.SALT_ROUNDS;
+const SALT_ROUNDS = parseInt(process.env.SALT_ROUNDS);
 import jwt from 'jsonwebtoken';
 const JWT_KEY = process.env.JWT_KEY;
 import { signupValidation } from './validation.js';
@@ -69,6 +69,7 @@ app.post('/', async (req, res) => {
 });
 
 app.post('/signup', async (req, res) => {
+    console.log("here")
     const { username, email, password } = req.body;
     const isValid = signupValidation.safeParse({ username, email, password });
     if (isValid.success) {
