@@ -69,18 +69,20 @@ app.post('/', async (req, res) => {
 });
 
 app.post('/signup', async (req, res) => {
-    console.log("here")
     const { username, email, password } = req.body;
+    console.log("Sign up Request from : ",username);
     const isValid = signupValidation.safeParse({ username, email, password });
     if (isValid.success) {
+        console.log("Authentication successful!");
         const isUser = await User.findOne({
             $or: [
                 { username: username },
                 { email: email }
             ]
         })
-        if (isUser) return res.json({ msg: "Username or email already exists" });
+        if (isUser) {console.log("User already exists"); return res.json({ msg: "Username or email already exists" });}
         else {
+            console.log("Trying to create ", username," new acc.");
             const hashedPass = await bcrypt.hash(password, SALT_ROUNDS);
             const userData = { username, email, password: hashedPass };
             const newUser = new User(userData);
