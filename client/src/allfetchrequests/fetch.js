@@ -14,7 +14,7 @@ function fetchSignup(username, email, password) {
     })
         .then(res => res.json())
         .then(data => data.msg)
-        .catch(err => console.error(err));
+        .catch(err => console.log(err));
 }
 
 function fetchLogin(username, password) {
@@ -30,7 +30,7 @@ function fetchLogin(username, password) {
     })
         .then(res => res.json())
         .then(data => data.msg)
-        .catch(err => console.error(err));
+        .catch(err => console.log(err));
 }
 
 function fetchHomepage(token) {
@@ -43,7 +43,7 @@ function fetchHomepage(token) {
     })
         .then(res => res.json())
         .then(data => data.msg)
-        .catch(err => console.error(err));
+        .catch(err => console.log(err));
 }
 
 function fetchCoordinates(city) {
@@ -57,7 +57,7 @@ function fetchCoordinates(city) {
     })
         .then(res => res.json())
         .then(data => data)
-        .catch(err => console.error(err));
+        .catch(err => console.log(err));
 }
 
 function fetchHeatdata() {
@@ -71,7 +71,7 @@ function fetchHeatdata() {
     })
         .then(res => res.json())
         .then(heatdata => heatdata)
-        .catch(err => console.error(err));
+        .catch(err => console.log(err));
 }
 
 export {
