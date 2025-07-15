@@ -14,7 +14,10 @@ function fetchSignup(username, email, password) {
     })
         .then(res => res.json())
         .then(data => data.msg)
-        .catch(err => console.log(err));
+        .catch(err => {
+            console.log("Signup err : ",err);
+            alert("Your device could not reach our backend, check your connection, disable VPN, or even try a different browser.");
+        });
 }
 
 function fetchLogin(username, password) {
@@ -30,7 +33,10 @@ function fetchLogin(username, password) {
     })
         .then(res => res.json())
         .then(data => data.msg)
-        .catch(err => console.log(err));
+        .catch(err => {
+            console.log("Login err : ",err);
+            alert("Your device could not reach our backend, check your connection, disable VPN, or even try a different browser.");
+        });
 }
 
 function fetchHomepage(token) {
