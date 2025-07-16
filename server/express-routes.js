@@ -110,7 +110,7 @@ app.get('/geocode', authMiddleware, async (req, res) => {
             const { lat, lon } = data[0];
             return res.json({ coordinates: { lat: parseFloat(lat), lng: parseFloat(lon) } });
         }
-        else return res.json({ msg: "City not found, Check for any invalid search." })
+        else return res.json({ msg: "City not found, Check for any invalid request." });
     }
     catch (err) {
         console.log(err);
@@ -120,9 +120,29 @@ app.get('/geocode', authMiddleware, async (req, res) => {
 
 app.get('/heatdata', authMiddleware, (req, res) => {
     const heatpointsData = JSON.parse(fs.readFileSync('./heatdata/heatpointsdata.json', 'utf-8'));
-    if (heatpointsData) res.json(heatpointsData);
+    if (heatpointsData) res.send(heatpointsData);
     else res.json({msg: "Server error"});
 });
+
+app.get('/localWeather', authMiddleware,  async (req, res) => {
+    const lat = parseFloat(req.query.lat);
+    const lng = parseFloat(req.query.lng);
+    let response;
+    if (lat && lng) {
+        try {
+            response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,cloud_cover,wind_speed_10m,wind_direction_10m,wind_gusts_10m&timezone=auto`);
+            response = await response.json();
+            res.send(response);
+        }
+        catch(err) {
+            console.log(err);
+            res.json("Failed to fetch, please retry.");
+        }
+    }
+    else res.json({msg: "Invalid latitude or longitude"});
+});
+
+app.get('/weather')
 
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`Backend live on port: ${PORT}`);

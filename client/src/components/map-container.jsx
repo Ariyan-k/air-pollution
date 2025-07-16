@@ -1,10 +1,10 @@
-import L, { map } from 'leaflet';
+import L, { map, marker } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet.heat';
 import { useEffect, useRef, useState } from 'react';
 import { fetchHeatdata } from '../allfetchrequests/fetch';
 import AboutHeatmap from './aboutHeatmap';
-
+import { fetchWeather } from '../allfetchrequests/fetch';
 
 export default function Mapcontainer({ lat, lng }) {
 
@@ -20,14 +20,26 @@ export default function Mapcontainer({ lat, lng }) {
     useEffect(() => {
         mapRef.current = L.map('map');
 
-        mapRef.current.on('click', (e) => {
+        mapRef.current.on('click', async (e) => {
             const clickLat = e.latlng.lat;
             const clickLng = e.latlng.lng;
+
             if (markerRef.current) {
                 mapRef.current.removeLayer(markerRef.current);
                 markerRef.current = null;
             }
-            markerRef.current = L.marker([clickLat, clickLng]);
+            markerRef.current = L.marker([clickLat, clickLng], {opacity: 0});
+            
+            const data = await fetchWeather(e.latlng);
+
+            const temp = `${data.current.temperature_2m}${data.current_units.temperature_2m}`;
+            const apparentTemp = `${data.current.apparent_temperature}${data.current_units.apparent_temperature}`;
+            const relHumidity = `${data.current.relative_humidity_2m}${data.current_units.relative_humidity_2m}`;
+            const precipitation = `${data.current.precipitation}${data.current_units.precipitation}`;
+
+            markerRef.current.bindTooltip(`<b>Temp</b>: ${temp}<br/><b>Feels like:</b> ${apparentTemp}<br/><b>Relative Humidity:</b> ${relHumidity}<br/><b>Precipitation:</b> ${precipitation}`, { permanent: true, direction: 'center', className: 'my-label' });
+
+            markerRef.current.addTo(mapRef.current);
         });
 
     }, []);
