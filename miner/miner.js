@@ -2,7 +2,7 @@
 
 import fetch from 'node-fetch';
 import fs from 'fs';
-import findAqi from './findaqi.js';
+import {findAqi} from './findaqi.js';
 
 const now = new Date(Date.now());
 const date = `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`;
@@ -21,7 +21,7 @@ async function convertDataForLeaflet() {
         const lat = aqidata.data[i].coord.lat;
         const lng = aqidata.data[i].coord.lon;
         const components = aqidata.data[i].list[0].components;
-        const result = findAqi(components); //returns object : {aqi:_, dominantPollutant:_,subIndices:{...}}
+        const result = findAqi(components, 'epa'); //returns object : {aqi:_, dominantPollutant:_,subIndices:{...}}
 
 
         const aqi = result.aqi;
