@@ -1,0 +1,111 @@
+//Do not update miner without thorough testing.
+
+import fetch from 'node-fetch';
+import {findAqiByMethod} from './findaqiByMethod.js';
+import { Heatpoint } from '../db.js';
+import fs from 'fs'
+
+const now = new Date();
+const date = `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`;
+const time = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
+const unixtime = now.getTime();
+
+let detailedAqis = {
+    data: []
+};
+let heatpoints = [];
+let aqis = [];
+
+
+async function convertDataForLeaflet() {
+    
+    console.log("\n\n\nStarting conversion...\n\n\n");
+    for (let i = 0; i < detailedAqis.data.length; i++) {
+        const lat = detailedAqis.data[i].coord.lat;
+        const lng = detailedAqis.data[i].coord.lon;
+        const components = detailedAqis.data[i].list[0].components;
+        const result = findAqiByMethod(components, 'epa'); //returns object : {aqi:_, dominantPollutant:_,subIndices:{...}}
+
+
+        const aqi = result.aqi;
+        let intensity;
+        if (aqi <= 50) intensity = 0.1;
+        else if (aqi <= 75) intensity = 0.2;
+        else if (aqi <= 100) intensity = 0.3;
+        else if (aqi <= 125) intensity = 0.4;
+        else if (aqi <= 150) intensity = 0.5;
+        else if (aqi <= 200) intensity = 0.6;
+        else if (aqi <= 250) intensity = 0.7;
+        else if (aqi <= 325) intensity = 0.8;
+        else if (aqi <= 350) intensity = 0.9;
+        else intensity = 1.0;
+
+        heatpoints.push([lat, lng, intensity]);
+        aqis.push(aqi);
+
+        console.log(`${i+1} entity converted.`);
+    }
+    await Heatpoint.updateOne(
+        { name: process.env.HEATPOINTS_COLLECTION_FIELD },
+        { $set: {
+            heatpoints: heatpoints,
+            aqis: aqis,
+            date: date,
+            time: time,
+            unixtime: unixtime
+        }}
+    );
+}
+
+async function callOpenweather() {
+
+    const KEY_1 = process.env.KEY_1;
+    const KEY_2 = process.env.KEY_2;
+    const KEY_3 = process.env.KEY_3;
+    const KEY_4 = process.env.KEY_4;
+
+    const keys = [KEY_1, KEY_2, KEY_3, KEY_4];
+    const allCityCoords = await JSON.parse(fs.readFileSync('./miner/cityCoords.json', 'utf-8'));
+    
+    for (let i = 0; i < keys.length; i++) {
+        console.log(`Using key : KEY_${keys[i]}`);
+        let key = keys[i];
+        let errCount = 0;
+        let j;
+        for (j = 0; j < allCityCoords.latlng.length; j++) {
+            const lng = allCityCoords.latlng[j][1];
+            const lat = allCityCoords.latlng[j][0];
+            try {
+                const localData = await fetch(`http://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lng}&appid=${key}`);
+                if (localData.ok) {
+                    const parsedLocalData = await localData.json();
+                    detailedAqis.data.push(parsedLocalData);
+                    console.log(`(${j+1}) entity added`);
+                }
+                else throw new Error(`network error`);
+            }
+            catch(err) {
+                console.log(err);
+                errCount+=1;
+                if(errCount <= 3) {
+                    j-=1;
+                    console.log("Entity couldn't be added, Retrying...");
+                    continue;
+                }
+                else {
+                    console.log("Either the key's request limit is exhausted or there is a server error.");
+                    break;
+                }
+            }
+            
+        }
+        if (j === allCityCoords.latlng.length) {
+            console.log("All entities added.");
+            break;
+        }
+
+    }
+    convertDataForLeaflet();
+}
+
+export default callOpenweather;
