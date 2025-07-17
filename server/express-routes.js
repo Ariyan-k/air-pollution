@@ -8,9 +8,10 @@ import jwt from 'jsonwebtoken';
 const JWT_KEY = process.env.JWT_KEY;
 import { signupValidation } from './validation.js';
 import { loginValidation } from './validation.js';
-import { User } from './db.js';
+import { User, initDB, Heatpoint } from './db.js';
 import fetch from 'node-fetch';
 import fs from 'fs';
+import callOpenweather from './miner/miner.js';
 
 
 const app = express();
@@ -19,6 +20,25 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(cors());
 app.use(express.static('../src'));
+await initDB();
+
+async function refreshHeatmapMiddleware() {
+    const data = await Heatpoint.findOne({name: process.env.HEATPOINTS_COLLECTION_FIELD});
+    const prevUnixtime = data.unixtime;
+    const currentUnixtime = Date.now();
+    const diff = (currentUnixtime - prevUnixtime)/1000;
+    const resetTime = 14400; //4 hours in seconds
+    if (diff > resetTime) {
+        try {
+            await callOpenweather();
+        }
+        catch(err) {
+            console.log(err);
+            console.log("Something went wrong, falling back to previous data.");
+        }
+    }
+    else console.log(`${(resetTime - diff)/(60*60)} hours remaining in refresh.`);
+}
 
 function authMiddleware(req, res, next) {
     const authHeader = req.headers.authorization;
@@ -40,11 +60,11 @@ function authMiddleware(req, res, next) {
     }
 }
 
-app.get('/Homepage', authMiddleware, (req, res) => {
+app.get('/Homepage', refreshHeatmapMiddleware, authMiddleware, (req, res) => {
     res.json({ msg: "authOK" });
 });
 
-app.get('/', (req, res) => {
+app.get('/', refreshHeatmapMiddleware, (req, res) => {
     res.json({ msg: "backend is active." });
 });
 
@@ -68,7 +88,7 @@ app.post('/', async (req, res) => {
     }
 });
 
-app.post('/signup', async (req, res) => {
+app.post('/signup', refreshHeatmapMiddleware, async (req, res) => {
     const { username, email, password } = req.body;
     console.log("Sign up Request from : ",username);
     const isValid = signupValidation.safeParse({ username, email, password });
@@ -141,8 +161,6 @@ app.get('/localWeather', authMiddleware,  async (req, res) => {
     }
     else res.json({msg: "Invalid latitude or longitude"});
 });
-
-app.get('/weather')
 
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`Backend live on port: ${PORT}`);

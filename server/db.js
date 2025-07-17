@@ -1,11 +1,13 @@
 import mongoose from "mongoose";
-import { required } from "zod/v4-mini";
-import dotenv from 'dotenv'
-dotenv.config();
 
-mongoose.connect(process.env.MONGODB_URI)
-    .then(() => console.log("MongoDB connected!"))
-    .catch(console.error);
+const initDB = async () => {
+    try 
+    {
+        await mongoose.connect(process.env.MONGODB_URI);
+        console.log("MongoDB connected!")
+    }
+    catch(err) {console.log(err)}
+}
 
 const userSchema = new mongoose.Schema({
     username: {type: String, unique: true},
@@ -13,6 +15,25 @@ const userSchema = new mongoose.Schema({
     password: String
 });
 
-const User = mongoose.model('users', userSchema);
+const heatpointsSchema = new mongoose.Schema({
+    heatpoints: {
+        type: [[Number]],
+        required: true
+    },
+    aqis: {
+        type: [Number],
+        required: true
+    },
+    date: {type: String, required: true},
+    time: {type: String, required: true},
+    unixtime: {type: Number, required: true}
+});
 
-export {User};
+const User = mongoose.model('users', userSchema);
+const Heatpoint = mongoose.model('heatpoints', heatpointsSchema);
+
+export {
+    initDB,
+    User,
+    Heatpoint
+};
