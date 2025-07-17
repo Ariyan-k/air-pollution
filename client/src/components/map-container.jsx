@@ -2,7 +2,7 @@ import L, { map, marker } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet.heat';
 import { useEffect, useRef, useState } from 'react';
-import { fetchHeatdata } from '../allfetchrequests/fetch';
+import { fetchHeatpointsandaqis } from '../allfetchrequests/fetch';
 import AboutHeatmap from './aboutHeatmap';
 import { fetchWeather } from '../allfetchrequests/fetch';
 
@@ -47,11 +47,11 @@ export default function Mapcontainer({ lat, lng }) {
     //for heatlayer
     useEffect(() => {
         async function wrapper() {
-            const heatdata = await fetchHeatdata();
+            const heatdata = await fetchHeatpointsandaqis();
             setDate(heatdata.date);
             setTime(heatdata.time);
             const heatpoints = heatdata.heatpoints;
-            const aqi = heatdata.respectiveAqi; //an array of aqis.
+            const aqi = heatdata.aqis; //an array of aqis.
             if(heatlayerRef.current) {
                 map.removeLayer(heatlayerRef.current);
                 heatlayerRef.current = null;
@@ -90,9 +90,9 @@ export default function Mapcontainer({ lat, lng }) {
 
             //bind aqi markers - 
             const markers = [];
-            for (let i = 0; i < heatdata.respectiveAqi.length; i++) {
+            for (let i = 0; i < heatdata.aqis.length; i++) {
                 const marker = L.marker([heatdata.heatpoints[i][0], heatdata.heatpoints[i][1]], {opacity: 0})
-                    .bindTooltip(`AQI: ${heatdata.respectiveAqi[i]}`, { permanent: true, direction: 'center', className: 'my-label' })
+                    .bindTooltip(`AQI: ${heatdata.aqis[i]}`, { permanent: true, direction: 'center', className: 'my-label' })
                 markers.push(marker);
             }
             const markerLayer = L.markerClusterGroup();

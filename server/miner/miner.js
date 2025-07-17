@@ -45,7 +45,7 @@ async function convertDataForLeaflet() {
 
         console.log(`${i+1} entity converted.`);
     }
-    await Heatpoint.updateOne(
+    await Heatpoint.findOneAndUpdate(
         { name: process.env.HEATPOINTS_COLLECTION_FIELD },
         { $set: {
             heatpoints: heatpoints,
@@ -53,7 +53,8 @@ async function convertDataForLeaflet() {
             date: date,
             time: time,
             unixtime: unixtime
-        }}
+        }},
+        {new: true}
     );
 }
 

@@ -66,9 +66,9 @@ function fetchCoordinates(city) {
         .catch(err => console.log(err));
 }
 
-function fetchHeatdata() {
+function fetchHeatpointsandaqis() {
     const token = localStorage.getItem('Authorization').split(" ")[1];
-    return fetch(`${BASE_URL}/heatdata`, {
+    return fetch(`${BASE_URL}/heatpointsandaqis`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -76,7 +76,7 @@ function fetchHeatdata() {
         }
     })
         .then(res => res.json())
-        .then(heatdata => heatdata)
+        .then(heatpointsandaqis => heatpointsandaqis)
         .catch(err => console.log(err));
 }
 
@@ -97,47 +97,11 @@ function fetchWeather({lat, lng}) {
         .catch(err => console.log(err));
 }
 
-// {
-//   latitude: 28.625,
-//   longitude: 77.25,
-//   generationtime_ms: 0.10251998901367188,
-//   utc_offset_seconds: 19800,
-//   timezone: 'Asia/Kolkata',
-//   timezone_abbreviation: 'GMT+5:30',
-//   elevation: 214,
-//   current_units: {
-//     time: 'iso8601',
-//     interval: 'seconds',
-//     temperature_2m: '°C',
-//     relative_humidity_2m: '%',
-//     apparent_temperature: '°C',
-//     is_day: '',
-//     precipitation: 'mm',
-//     cloud_cover: '%',
-//     wind_speed_10m: 'km/h',
-//     wind_direction_10m: '°',
-//     wind_gusts_10m: 'km/h'
-//   },
-//   current: {
-//     time: '2025-07-16T14:45',
-//     interval: 900,
-//     temperature_2m: 30,
-//     relative_humidity_2m: 77,
-//     apparent_temperature: 36.3,
-//     is_day: 1,
-//     precipitation: 0,
-//     cloud_cover: 100,
-//     wind_speed_10m: 5.6,
-//     wind_direction_10m: 153,
-//     wind_gusts_10m: 21.6
-//   }
-// }
-
 export {
     fetchSignup,
     fetchLogin,
     fetchHomepage,
     fetchCoordinates,
-    fetchHeatdata,
+    fetchHeatpointsandaqis,
     fetchWeather
 }
