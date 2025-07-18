@@ -148,7 +148,7 @@ app.get('/heatpointsandaqis', authMiddleware, async (req, res) => {
     const prevUnixtime = data.unixtime;
     const currentUnixtime = Date.now();
     const diff = (currentUnixtime - prevUnixtime)/1000;
-    const resetTime = 10; //4 hours in seconds
+    const resetTime = 14400; //4 hours in seconds
     if (diff > resetTime) {
         try {
             console.log("Starting refresh process.");

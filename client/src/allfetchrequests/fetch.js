@@ -73,8 +73,6 @@ function fetchHeatpointsandaqis() {
     const time = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
     const unixtime = now.getTime();
 
-    console.log(date, time, unixtime);
-
     const token = localStorage.getItem('Authorization').split(" ")[1];
     return fetch(`${BASE_URL}/heatpointsandaqis`, {
         method: 'GET',
