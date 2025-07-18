@@ -139,6 +139,9 @@ app.get('/localWeather', authMiddleware,  async (req, res) => {
 });
 
 app.get('/heatpointsandaqis', authMiddleware, async (req, res) => {
+
+    const {date, time, unixtime} = req.headers;
+
     const data = await Heatpoint.findOne({name: process.env.HEATPOINTS_COLLECTION_FIELD});
     const prevUnixtime = data.unixtime;
     const currentUnixtime = Date.now();

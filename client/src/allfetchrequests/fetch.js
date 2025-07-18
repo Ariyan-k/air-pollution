@@ -1,5 +1,10 @@
 const BASE_URL = import.meta.env.VITE_API_URL;
 
+const now = new Date();
+const date = `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`;
+const time = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
+const unixtime = now.getTime();
+
 function fetchSignup(username, email, password) {
     return fetch(`${BASE_URL}/signup`, {
         method: 'POST',
@@ -72,7 +77,10 @@ function fetchHeatpointsandaqis() {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${token}`,
+            'date': date,
+            'time': time,
+            'unixtime': unixtime
         }
     })
         .then(res => res.json())

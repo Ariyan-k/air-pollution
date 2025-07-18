@@ -5,11 +5,6 @@ import {findAqiByMethod} from './findaqiByMethod.js';
 import { Heatpoint } from '../db.js';
 import fs from 'fs'
 
-const now = new Date();
-const date = `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`;
-const time = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
-const unixtime = now.getTime();
-
 let detailedAqis = {
     data: []
 };
@@ -17,7 +12,7 @@ let heatpoints = [];
 let aqis = [];
 
 
-async function convertDataForLeaflet() {
+async function convertDataForLeaflet(date, time, unixtime) {
     
     console.log("\n\n\nStarting conversion...\n\n\n");
     for (let i = 0; i < detailedAqis.data.length; i++) {
@@ -45,20 +40,23 @@ async function convertDataForLeaflet() {
 
         console.log(`${i+1} entity converted.`);
     }
-    await Heatpoint.findOneAndUpdate(
+    await Heatpoint.updateOne(
         { name: process.env.HEATPOINTS_COLLECTION_FIELD },
         { $set: {
             heatpoints: heatpoints,
             aqis: aqis,
             date: date,
-            time: time,
-            unixtime: unixtime
-        }},
-        {new: true}
+            time: time
+        }}
     );
 }
 
-async function callOpenweather() {
+async function callOpenweather(date, time, unixtime) {
+
+    await Heatpoint.updateOne(
+        {name: 'heatpointsandaqis'},
+        {$set : {unixtime: unixtime}}
+    );
 
     const KEY_1 = process.env.KEY_1;
     const KEY_2 = process.env.KEY_2;
@@ -106,7 +104,7 @@ async function callOpenweather() {
         }
 
     }
-    convertDataForLeaflet();
+    convertDataForLeaflet(date, time, unixtime);
 }
 
 export default callOpenweather;
