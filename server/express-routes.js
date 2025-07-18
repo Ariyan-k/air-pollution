@@ -151,7 +151,8 @@ app.get('/heatpointsandaqis', authMiddleware, async (req, res) => {
         },
         {
             $set: {isRunning: true}
-        }
+        },
+        {new: true}
     );
 
     if (data) {
