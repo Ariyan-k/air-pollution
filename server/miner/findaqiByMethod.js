@@ -168,10 +168,8 @@ export function findAqiEPA(components) {
 
 export function findAqiByMethod(components, method='cpcb') {
     if (method === 'epa') {
-        console.log("Calculating aqi according to US EPA method - ");
         return findAqiEPA(components);
     } else {
-        console.log("Calculating aqi according to CPCB method - ");
         return findAqiCPCB(components);
     }
 }

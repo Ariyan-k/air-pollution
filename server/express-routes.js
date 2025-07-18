@@ -140,16 +140,19 @@ app.get('/localWeather', authMiddleware,  async (req, res) => {
 
 app.get('/heatpointsandaqis', authMiddleware, async (req, res) => {
 
-    const {date, time, unixtime} = req.headers;
+    const date = req.headers.xdate;
+    const time = req.headers.xtime;
+    const unixtime = req.headers.xunixtime;
 
     const data = await Heatpoint.findOne({name: process.env.HEATPOINTS_COLLECTION_FIELD});
     const prevUnixtime = data.unixtime;
     const currentUnixtime = Date.now();
     const diff = (currentUnixtime - prevUnixtime)/1000;
-    const resetTime = 14400; //4 hours in seconds
+    const resetTime = 10; //4 hours in seconds
     if (diff > resetTime) {
         try {
-            await callOpenweather();
+            console.log("Starting refresh process.");
+            await callOpenweather(date, time, unixtime);
             const data = await Heatpoint.findOne({name: "heatpointsandaqis"});
             res.json(data);
             console.log("Refresh successful.");

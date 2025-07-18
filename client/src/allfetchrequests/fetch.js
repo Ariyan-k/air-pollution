@@ -1,10 +1,5 @@
 const BASE_URL = import.meta.env.VITE_API_URL;
 
-const now = new Date();
-const date = `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`;
-const time = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
-const unixtime = now.getTime();
-
 function fetchSignup(username, email, password) {
     return fetch(`${BASE_URL}/signup`, {
         method: 'POST',
@@ -72,15 +67,23 @@ function fetchCoordinates(city) {
 }
 
 function fetchHeatpointsandaqis() {
+
+    const now = new Date();
+    const date = `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`;
+    const time = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
+    const unixtime = now.getTime();
+
+    console.log(date, time, unixtime);
+
     const token = localStorage.getItem('Authorization').split(" ")[1];
     return fetch(`${BASE_URL}/heatpointsandaqis`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`,
-            'date': date,
-            'time': time,
-            'unixtime': unixtime
+            'xdate': date,
+            'xtime': time,
+            'xunixtime': unixtime
         }
     })
         .then(res => res.json())

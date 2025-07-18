@@ -5,6 +5,8 @@ import {findAqiByMethod} from './findaqiByMethod.js';
 import { Heatpoint } from '../db.js';
 import fs from 'fs'
 
+let deploylogs = "";
+
 let detailedAqis = {
     data: []
 };
@@ -12,14 +14,16 @@ let heatpoints = [];
 let aqis = [];
 
 
-async function convertDataForLeaflet(date, time, unixtime) {
+async function convertDataForLeaflet(date, time) {
     
-    console.log("\n\n\nStarting conversion...\n\n\n");
+    deploylogs += "\nStarting conversion...\n";
+    const method = 'epa';
+    deploylogs += `Calculating aqi according to ${method} method\n`;
     for (let i = 0; i < detailedAqis.data.length; i++) {
         const lat = detailedAqis.data[i].coord.lat;
         const lng = detailedAqis.data[i].coord.lon;
         const components = detailedAqis.data[i].list[0].components;
-        const result = findAqiByMethod(components, 'epa'); //returns object : {aqi:_, dominantPollutant:_,subIndices:{...}}
+        const result = findAqiByMethod(components, method); //returns object : {aqi:_, dominantPollutant:_,subIndices:{...}}
 
 
         const aqi = result.aqi;
@@ -38,7 +42,7 @@ async function convertDataForLeaflet(date, time, unixtime) {
         heatpoints.push([lat, lng, intensity]);
         aqis.push(aqi);
 
-        console.log(`${i+1} entity converted.`);
+        deploylogs += `${i+1} entity converted.\n`;
     }
     await Heatpoint.updateOne(
         { name: process.env.HEATPOINTS_COLLECTION_FIELD },
@@ -49,6 +53,8 @@ async function convertDataForLeaflet(date, time, unixtime) {
             time: time
         }}
     );
+    deploylogs += `Time: ${time}\nDate: ${date}`;
+    console.log(deploylogs);
 }
 
 async function callOpenweather(date, time, unixtime) {
@@ -67,7 +73,7 @@ async function callOpenweather(date, time, unixtime) {
     const allCityCoords = await JSON.parse(fs.readFileSync('./miner/cityCoords.json', 'utf-8'));
     
     for (let i = 0; i < keys.length; i++) {
-        console.log(`Using key : KEY_${keys[i]}`);
+        deploylogs += `Using key : KEY_${i}\n`;
         let key = keys[i];
         let errCount = 0;
         let j;
@@ -79,32 +85,36 @@ async function callOpenweather(date, time, unixtime) {
                 if (localData.ok) {
                     const parsedLocalData = await localData.json();
                     detailedAqis.data.push(parsedLocalData);
-                    console.log(`(${j+1}) entity added`);
+                    deploylogs+=`(${j+1}) entity added\n`;
                 }
                 else throw new Error(`network error`);
             }
             catch(err) {
-                console.log(err);
+                deploylogs+=JSON.stringify({
+                    name: err.name,
+                    message: err.message,
+                    stack: err.stack
+                }) + '\n';
                 errCount+=1;
                 if(errCount <= 3) {
                     j-=1;
-                    console.log("Entity couldn't be added, Retrying...");
+                    deploylogs += "Entity couldn't be added, Retrying...\n";
                     continue;
                 }
                 else {
-                    console.log("Either the key's request limit is exhausted or there is a server error.");
+                    deploylogs += "Either the key's request limit is exhausted or there is a server error.\n";
                     break;
                 }
             }
             
         }
         if (j === allCityCoords.latlng.length) {
-            console.log("All entities added.");
+            deploylogs+="All entities added.\n";
             break;
         }
 
     }
-    convertDataForLeaflet(date, time, unixtime);
+    convertDataForLeaflet(date, time);
 }
 
 export default callOpenweather;
