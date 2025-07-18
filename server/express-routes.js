@@ -174,8 +174,8 @@ app.get('/heatpointsandaqis', authMiddleware, async (req, res) => {
 
 app.get('/logs', async (req, res) => {
     try{
-        const logs = await JSON.parse(fs.readFileSync('./miner/logs.txt', 'utf-8'));
-        res.json(logs);
+        const logs = fs.readFileSync('./miner/logs.txt', 'utf-8');
+        res.type('text/plain').send(logs);
     }
     catch(err) {
         res.json({msg: "logs file not found or invalid."});
