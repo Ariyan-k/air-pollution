@@ -53,7 +53,7 @@ async function convertDataForLeaflet(date, time) {
             time: time
         }}
     );
-    deploylogs += `Time: ${time}\nDate: ${date}\n-------------------------------------------------------------`;
+    deploylogs += `\n\n-----------------------------------\n\n`;
     
     fs.writeFileSync('./miner/logs.txt', deploylogs, 'utf-8');
 
@@ -68,10 +68,7 @@ async function convertDataForLeaflet(date, time) {
 
 async function callOpenweather(date, time, unixtime) {
 
-    await Heatpoint.updateOne(
-        {name: 'heatpointsandaqis'},
-        {$set : {unixtime: unixtime}}
-    );
+    deploylogs += `\n\nTime: ${time}\nDate: ${date}\n\n`;
 
     const KEY_1 = process.env.KEY_1;
     const KEY_2 = process.env.KEY_2;
@@ -82,7 +79,7 @@ async function callOpenweather(date, time, unixtime) {
     const allCityCoords = await JSON.parse(fs.readFileSync('./miner/cityCoords.json', 'utf-8'));
     
     for (let i = 0; i < keys.length; i++) {
-        deploylogs += `Using key : KEY_${i}\n`;
+        deploylogs += `Using key : KEY_${i+1}\n`;
         let key = keys[i];
         let errCount = 0;
         let j;

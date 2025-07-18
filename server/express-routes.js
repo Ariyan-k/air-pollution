@@ -145,18 +145,23 @@ app.get('/heatpointsandaqis', authMiddleware, async (req, res) => {
     const unixtime = req.headers.xunixtime;
 
     const data = await Heatpoint.findOne({name: process.env.HEATPOINTS_COLLECTION_FIELD});
+
     const prevUnixtime = data.unixtime;
     const currentUnixtime = Date.now();
     const diff = (currentUnixtime - prevUnixtime)/1000;
-    const resetTime = 14400; //4 hours in seconds
+    const resetTime = 3600; //1 hour
+
     if (diff > resetTime) {
         try {
+            await Heatpoint.updateOne(
+                {name: process.env.HEATPOINTS_COLLECTION_FIELD},
+                {$set: {unixtime: currentUnixtime}}
+            );
             console.log("Starting refresh process.");
             await callOpenweather(date, time, unixtime);
             console.log("Task executed.");
             const data = await Heatpoint.findOne({name: "heatpointsandaqis"});
             res.json(data);
-            console.log("Refresh successful.");
         }
         catch(err) {
             console.log(err);
