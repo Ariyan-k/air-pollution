@@ -53,8 +53,17 @@ async function convertDataForLeaflet(date, time) {
             time: time
         }}
     );
-    deploylogs += `Time: ${time}\nDate: ${date}`;
-    console.log(deploylogs);
+    deploylogs += `Time: ${time}\nDate: ${date}\n-------------------------------------------------------------`;
+    
+    fs.writeFileSync('./miner/logs.txt', deploylogs, 'utf-8');
+
+    const detailedlogs = {
+        heatpoints: heatpoints,
+        aqis: aqis,
+        detailedAqis: detailedAqis
+    }
+
+    fs.writeFileSync('./miner/detailedlogs.txt', JSON.stringify(detailedlogs, null, 2), 'utf-8');
 }
 
 async function callOpenweather(date, time, unixtime) {

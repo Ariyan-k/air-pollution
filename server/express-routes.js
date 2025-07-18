@@ -153,6 +153,7 @@ app.get('/heatpointsandaqis', authMiddleware, async (req, res) => {
         try {
             console.log("Starting refresh process.");
             await callOpenweather(date, time, unixtime);
+            console.log("Task executed.");
             const data = await Heatpoint.findOne({name: "heatpointsandaqis"});
             res.json(data);
             console.log("Refresh successful.");
@@ -168,6 +169,26 @@ app.get('/heatpointsandaqis', authMiddleware, async (req, res) => {
         console.log(`${(resetTime - diff)/(60*60)} hours remaining in heatmap refresh.`);
         const data = await Heatpoint.findOne({name: "heatpointsandaqis"});
         res.json(data);
+    }
+});
+
+app.get('/logs', async (req, res) => {
+    try{
+        const logs = await JSON.parse(fs.readFileSync('./miner/logs.txt', 'utf-8'));
+        res.json(logs);
+    }
+    catch(err) {
+        res.json({msg: "logs file not found or invalid."});
+    }
+}); 
+
+app.get('/detailedlogs', async(req, res) => {
+    try{
+        const detailedlogs = await JSON.parse(fs.readFileSync('./miner/detailedlogs.txt', 'utf-8'));
+        res.json(detailedlogs);
+    }
+    catch(err) {
+        res.json({msg: "detailedlogs file not found or invalid."});
     }
 });
 
