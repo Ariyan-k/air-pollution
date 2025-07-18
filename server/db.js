@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { boolean } from "zod";
 
 const initDB = async () => {
     try 
@@ -26,7 +27,8 @@ const heatpointsSchema = new mongoose.Schema({
     },
     date: {type: String, required: true},
     time: {type: String, required: true},
-    unixtime: {type: Number, required: true}
+    unixtime: {type: Number, required: true},
+    isRunning: {type: Boolean, default: false}
 });
 
 const User = mongoose.model('users', userSchema);

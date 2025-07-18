@@ -144,36 +144,52 @@ app.get('/heatpointsandaqis', authMiddleware, async (req, res) => {
     const time = req.headers.xtime;
     const unixtime = req.headers.xunixtime;
 
-    const data = await Heatpoint.findOne({name: process.env.HEATPOINTS_COLLECTION_FIELD});
+    const data = await Heatpoint.findOneAndUpdate(
+        {
+            name: process.env.HEATPOINTS_COLLECTION_FIELD,
+            isRunning: false
+        },
+        {
+            $set: {isRunning: true}
+        }
+    );
 
-    const prevUnixtime = data.unixtime;
-    const currentUnixtime = Date.now();
-    const diff = (currentUnixtime - prevUnixtime)/1000;
-    const resetTime = 3600; //1 hour
+    if (data) {
+        const prevUnixtime = data.unixtime;
+        const currentUnixtime = Date.now();
+        
+        const diff = currentUnixtime - prevUnixtime;
+        const resetTime = 3600; //1 hour
 
-    if (diff > resetTime) {
         try {
-            await Heatpoint.updateOne(
-                {name: process.env.HEATPOINTS_COLLECTION_FIELD},
-                {$set: {unixtime: currentUnixtime}}
-            );
-            console.log("Starting refresh process.");
-            await callOpenweather(date, time, unixtime);
-            console.log("Task executed.");
-            const data = await Heatpoint.findOne({name: "heatpointsandaqis"});
-            res.json(data);
+            if (diff / 1000 > resetTime) {
+                console.log("Starting refresh process - ");
+                await callOpenweather(date, time, unixtime);
+                console.log("Refresh executed successfully.");
+            }
+            else {
+                console.log(`${(resetTime - diff)/(60*60)} hours remaining in heatmap refresh.`);
+            }
+            const data = await Heatpoint.findOne({name: process.env.HEATPOINTS_COLLECTION_FIELD});
+            return res.json(data);
         }
         catch(err) {
-            console.log(err);
-            console.log("Something went wrong, falling back to previous data.");
-            const fallbackData = await Heatpoint.findOne({name: "fallbackdata"});
-            res.json(fallbackData);
+            console.log("Something broke in miner (check logs) or cannot fetch docs from db.");
+            console.error(err);
+            const fallbackdata = await Heatpoint.findOne({name: 'fallbackdata'});
+            return res.json(fallbackdata);
+        }
+        finally {
+            await Heatpoint.updateOne(
+                {name: process.env.HEATPOINTS_COLLECTION_FIELD},
+                {$set: {isRunning: false}}
+            ); 
         }
     }
     else {
-        console.log(`${(resetTime - diff)/(60*60)} hours remaining in heatmap refresh.`);
-        const data = await Heatpoint.findOne({name: "heatpointsandaqis"});
-        res.json(data);
+        console.log("Another process is already running, cannot allow mining due to race conditions");
+        const data = await Heatpoint.findOne({name: process.env.HEATPOINTS_COLLECTION_FIELD});
+        return res.json(data);
     }
 });
 
