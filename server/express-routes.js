@@ -159,11 +159,11 @@ app.get('/heatpointsandaqis', authMiddleware, async (req, res) => {
         const prevUnixtime = data.unixtime;
         const currentUnixtime = Date.now();
         
-        const diff = currentUnixtime - prevUnixtime;
+        const diff = (currentUnixtime - prevUnixtime)/1000;
         const resetTime = 3600; //1 hour
 
         try {
-            if (diff / 1000 > resetTime) {
+            if (diff > resetTime) {
                 console.log("Starting refresh process - ");
                 await callOpenweather(date, time, unixtime);
                 console.log("Refresh executed successfully.");
