@@ -5,16 +5,10 @@ import {findAqiByMethod} from './findaqiByMethod.js';
 import { Heatpoint } from '../db.js';
 import fs from 'fs'
 
-let deploylogs = "";
+async function convertDataForLeaflet(date, time, unixtime, deploylogs, detailedAqis) {
 
-let detailedAqis = {
-    data: []
-};
-let heatpoints = [];
-let aqis = [];
-
-
-async function convertDataForLeaflet(date, time, unixtime) {
+    let heatpoints = [];
+    let aqis = [];
     
     deploylogs += "\nStarting conversion...\n";
     const method = 'epa';
@@ -59,6 +53,8 @@ async function convertDataForLeaflet(date, time, unixtime) {
     fs.writeFileSync('./miner/logs.txt', deploylogs, 'utf-8');
 
     const detailedlogs = {
+        date: date,
+        time: time,
         heatpoints: heatpoints,
         aqis: aqis,
         detailedAqis: detailedAqis
@@ -68,6 +64,12 @@ async function convertDataForLeaflet(date, time, unixtime) {
 }
 
 async function callOpenweather(date, time, unixtime) {
+
+    let deploylogs = "";
+
+    let detailedAqis = {
+        data: []
+    };
 
     deploylogs += `\n\nTime: ${time}\nDate: ${date}\n\n`;
 
@@ -121,7 +123,7 @@ async function callOpenweather(date, time, unixtime) {
         }
 
     }
-    convertDataForLeaflet(date, time, unixtime);
+    convertDataForLeaflet(date, time, unixtime, deploylogs, detailedAqis);
 }
 
 export default callOpenweather;
