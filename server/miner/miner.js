@@ -14,7 +14,7 @@ let heatpoints = [];
 let aqis = [];
 
 
-async function convertDataForLeaflet(date, time) {
+async function convertDataForLeaflet(date, time, unixtime) {
     
     deploylogs += "\nStarting conversion...\n";
     const method = 'epa';
@@ -50,7 +50,8 @@ async function convertDataForLeaflet(date, time) {
             heatpoints: heatpoints,
             aqis: aqis,
             date: date,
-            time: time
+            time: time,
+            unixtime: unixtime
         }}
     );
     deploylogs += `\n\n-----------------------------------\n\n`;
@@ -120,7 +121,7 @@ async function callOpenweather(date, time, unixtime) {
         }
 
     }
-    convertDataForLeaflet(date, time);
+    convertDataForLeaflet(date, time, unixtime);
 }
 
 export default callOpenweather;
