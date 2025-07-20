@@ -66,6 +66,20 @@ function fetchCoordinates(city) {
         .catch(err => console.log(err));
 }
 
+function fetchArea(lat, lng) {
+    const token = localStorage.getItem('Authorization').split(" ")[1];
+    return fetch(`${BASE_URL}/reverse-geocode?lat=${lat}&lng=${lng}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    })
+        .then(res => res.json())
+        .then(data => data)
+        .catch(err => console.log(err));
+}
+
 function fetchHeatpointsandaqis() {
 
     const now = new Date();
@@ -111,6 +125,7 @@ export {
     fetchLogin,
     fetchHomepage,
     fetchCoordinates,
+    fetchArea,
     fetchHeatpointsandaqis,
     fetchWeather
 }

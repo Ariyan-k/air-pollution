@@ -24,16 +24,17 @@ export default function Homepage() {
     return (
         <div className="
             lg:p-5
-    
+            flex justify-center items-center overflow-hidden gap-y-5 lg:gap-x-5 
+            flex-col
             lg:flex lg:flex-row
         ">
-            <Mapcontainer lat={lat} lng={lng}/>
+            <Mapcontainer lat={lat} lng={lng} setReqCity={setReqCity} setReqTime={setReqTime}/>
             <div className="
                 w-auto h-[40vh]
                 lg:w-auto lg:h-[80vh] 
                 flex flex-col items-baseline
             ">
-                <div className="h-full lg:h-[80vh] flex justify-between flex-col space-y-3">
+                <div className="h-full lg:h-[80vh] flex flex-col-reverse justify-between lg:flex-col space-y-3">
                     <Result reqCity={reqCity}/>
                     <Userquerydisplay reqCity={reqCity} reqTime={reqTime}/>
                     <Search setLat={setLat} setLng={setLng} setReqCity={setReqCity} setReqTime={setReqTime}/>

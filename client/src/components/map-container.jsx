@@ -2,11 +2,11 @@ import L, { map, marker } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet.heat';
 import { useEffect, useRef, useState } from 'react';
-import { fetchHeatpointsandaqis } from '../allfetchrequests/fetch';
+import { fetchArea, fetchHeatpointsandaqis } from '../allfetchrequests/fetch';
 import AboutHeatmap from './aboutHeatmap';
 import { fetchWeather } from '../allfetchrequests/fetch';
 
-export default function Mapcontainer({ lat, lng }) {
+export default function Mapcontainer({ lat, lng, setReqCity, setReqTime }) {
 
     //date time to be passed as props
     const [date, setDate] = useState(null);
@@ -21,8 +21,18 @@ export default function Mapcontainer({ lat, lng }) {
         mapRef.current = L.map('map');
 
         mapRef.current.on('click', async (e) => {
+
+            const now = new Date();
+
+            const time = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
+            setReqTime(time);
+
             const clickLat = e.latlng.lat;
             const clickLng = e.latlng.lng;
+
+            const area = await fetchArea(clickLat, clickLng);
+            const displayName = area.display_name;
+            setReqCity((area.address.state_district));
 
             if (markerRef.current) {
                 mapRef.current.removeLayer(markerRef.current);
@@ -32,12 +42,13 @@ export default function Mapcontainer({ lat, lng }) {
             
             const data = await fetchWeather(e.latlng);
 
+
             const temp = `${data.current.temperature_2m}${data.current_units.temperature_2m}`;
             const apparentTemp = `${data.current.apparent_temperature}${data.current_units.apparent_temperature}`;
             const relHumidity = `${data.current.relative_humidity_2m}${data.current_units.relative_humidity_2m}`;
             const precipitation = `${data.current.precipitation}${data.current_units.precipitation}`;
 
-            markerRef.current.bindTooltip(`<b>Temp</b>: ${temp}<br/><b>Feels like:</b> ${apparentTemp}<br/><b>Relative Humidity:</b> ${relHumidity}<br/><b>Precipitation:</b> ${precipitation}`, { permanent: true, direction: 'center', className: 'my-label' });
+            markerRef.current.bindTooltip(`<b>${displayName}</b><br/><b>Temp</b>: ${temp}<br/><b>Feels like:</b> ${apparentTemp}<br/><b>Relative Humidity:</b> ${relHumidity}<br/><b>Precipitation:</b> ${precipitation}`, { permanent: true, direction: 'center', className: 'my-label' });
 
             markerRef.current.addTo(mapRef.current);
         });
@@ -105,7 +116,7 @@ export default function Mapcontainer({ lat, lng }) {
 
     //for search
     useEffect(() => {
-        mapRef.current.setView([lat, lng], 7);
+        mapRef.current.setView([lat, lng], 9);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; OpenStreetMap contributors'

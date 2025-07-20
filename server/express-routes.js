@@ -120,6 +120,24 @@ app.get('/geocode', authMiddleware, async (req, res) => {
     }
 });
 
+app.get('/reverse-geocode', authMiddleware, async (req, res) => {
+    const {lat, lng} = req.query;
+    try {
+        let target = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18`, {
+                headers:
+                {
+                    'User-Agent': 'airlytics-red.vercel.app (ariyansworkmail@gmail.com)'
+                }
+            });
+        target = await target.json();
+        res.json(target);
+    }
+    catch(err) {
+        console.log(err);
+        //send no response
+    }
+});
+
 app.get('/localWeather', authMiddleware,  async (req, res) => {
     const lat = parseFloat(req.query.lat);
     const lng = parseFloat(req.query.lng);
