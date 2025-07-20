@@ -39,12 +39,12 @@ function fetchLogin(username, password) {
         });
 }
 
-function fetchHomepage(token) {
+function fetchHomepage(authHeader) {
     return fetch(`${BASE_URL}/Homepage`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            'Authorization': authHeader
         }
     })
         .then(res => res.json())

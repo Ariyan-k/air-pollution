@@ -4,6 +4,7 @@ import Userquerydisplay from "../components/User-query-display";
 import Search from "../components/Search";
 import { fetchHomepage } from "../allfetchrequests/fetch";
 import { useEffect, useState } from "react";
+import {Link} from 'react-router-dom'
 
 export default function Homepage() {
 
@@ -15,23 +16,15 @@ export default function Homepage() {
 
     useEffect(() => {
         const authHeader = localStorage.getItem('Authorization');
-        if (authHeader) {
-            async function wrapper() {
-                const token = authHeader.split(" ")[1];
-                const data = await fetchHomepage(token);
-                setIsValidAuth(data);
-            }
-            wrapper();
-        }
-        else setIsValidAuth("Error: Bad request.");
+        const data = fetchHomepage(authHeader)
+            .then(msg => setIsValidAuth(msg));
     }, []);
 
     if (isValidAuth === "authOK")
     return (
         <div className="
             lg:p-5
-            flex justify-center items-center overflow-hidden gap-y-5 lg:gap-x-5 
-            flex-col
+    
             lg:flex lg:flex-row
         ">
             <Mapcontainer lat={lat} lng={lng}/>
@@ -49,8 +42,9 @@ export default function Homepage() {
         </div>
     )
     else return (
-        <div className="h-[60vh] w-[100vw] font-extrabold text-2xl bg-black text-white flex justify-center items-center">
-            {isValidAuth}
+        <div className="h-[60vh] w-[100vw] text-[15px] lg:text-[25px] bg-black text-white flex flex-col justify-center items-center space-y-10">
+            <div>{isValidAuth}</div>
+            <Link to={'/'} className="text-[10px] lg:text-[15px] text-blue-600">Redirect to Login page.</Link>
         </div>
     )
 }

@@ -28,7 +28,7 @@ function authMiddleware(req, res, next) {
         return res.json({ msg: "No token provided" });
     }
 
-    if (!authHeader.startsWith('Bearer ')) {
+    else if (!authHeader.startsWith('Bearer ')) {
         return res.json({ msg: "Invalid token format. Expected 'Bearer <token>'" });
     }
 
@@ -58,7 +58,7 @@ app.post('/', async (req, res) => {
         if (isUser) {
             const passAuth = await bcrypt.compare(password, isUser.password);
             if (passAuth) {
-                const token = jwt.sign({ userId: isUser._id }, JWT_KEY, { expiresIn: '1h' });
+                const token = jwt.sign({ userId: isUser._id }, JWT_KEY, { expiresIn: '6h' });
                 return res.json({ msg: token });
             }
             else return res.json({ msg: "Incorrect password" });
