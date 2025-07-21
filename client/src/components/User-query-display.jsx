@@ -11,7 +11,7 @@ export default function Userquerydisplay({reqCity, reqTime}) {
 
       mt-3
     ">
-      REQUEST → CITY: <span className="mx-2 text-white font-bold">{reqCity.toUpperCase()}</span> | TIME: <span className="ml-2 text-white font-bold">{reqTime} HRS</span>
+      REQUEST → <span className="mx-2 text-white font-bold">{reqCity.toUpperCase()}</span> | TIME: <span className="ml-2 text-white font-bold">{reqTime} HRS</span>
     </div>
   );
 }

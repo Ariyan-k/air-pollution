@@ -16,11 +16,14 @@ export default function Mapcontainer({ lat, lng, setReqCity, setReqTime }) {
     const mapRef = useRef(null);
     const heatlayerRef = useRef(null);
     const popupRef = useRef(null);
+    const tooltipIntervalRef = useRef(null);
 
     useEffect(() => {
         mapRef.current = L.map('map');
 
+
         mapRef.current.on('click', async (e) => {
+            tooltipIntervalRef.current = null;
 
             const now = new Date();
 
@@ -51,6 +54,10 @@ export default function Mapcontainer({ lat, lng, setReqCity, setReqTime }) {
             markerRef.current.bindTooltip(`<b>${displayName}</b><br/><b>Temp</b>: ${temp}<br/><b>Feels like:</b> ${apparentTemp}<br/><b>Relative Humidity:</b> ${relHumidity}<br/><b>Precipitation:</b> ${precipitation}`, { permanent: true, direction: 'center', className: 'my-label' });
 
             markerRef.current.addTo(mapRef.current);
+
+            tooltipIntervalRef.current = setTimeout(() => {
+                mapRef.current.removeLayer(markerRef.current);
+            }, 12000);
         });
 
     }, []);
