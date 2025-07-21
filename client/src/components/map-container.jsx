@@ -136,10 +136,12 @@ export default function Mapcontainer({ lat, lng, setReqCity, setReqTime }) {
             <div
                 id='map'
                 className="
-                    w-[95vw] h-[55vh]
+                    w-[95vw] h-[58vh]
                     lg:w-[90vw] lg:h-[80vh]
                     bg-white rounded-md shadow-xl relative
                     text-black
+
+                    flex justify-self-center
                 "
             >
                 <AboutHeatmap date={date} time={time}/>

@@ -24,13 +24,12 @@ export default function Homepage() {
     return (
         <div className="
             lg:p-5
-            flex justify-center items-center overflow-hidden gap-y-5 lg:gap-x-5 
-            flex-col
-            lg:flex lg:flex-row
+            lg:static lg:flex lg:justify-center lg:items-center overflow-hidden gap-y-5 lg:gap-x-5 lg:flex-row
+            relative 
         ">
             <Mapcontainer lat={lat} lng={lng} setReqCity={setReqCity} setReqTime={setReqTime}/>
             <div className="
-                w-auto h-[40vh]
+                w-full h-[40vh]
                 lg:w-auto lg:h-[80vh] 
                 flex flex-col items-baseline
             ">

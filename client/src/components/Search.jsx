@@ -27,7 +27,7 @@ export default function Search({ setLat, setLng, setReqCity, setReqTime }) {
   return (
     <div
       className="
-        absolute bottom-[35vh] left-[5vw] z-[1000] w-[95vw] pb-2
+        absolute bottom-[42vh] left-[5vw] z-[1000] w-[95vw] pb-2
         lg:static lg:flex lg:justify-center lg:items-center lg:rounded-[5px] lg:w-[50vw] lg:pb-0
       "
     >

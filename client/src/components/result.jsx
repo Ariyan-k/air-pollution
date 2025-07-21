@@ -1,10 +1,10 @@
 export default function Result({reqCity}) {
   return (
     <div className="
-      w-[95vw] lg:w-[50vw]
+      w-[100vw] lg:w-[50vw]
       h-[35vh] lg:h-[68vh]
       bg-black
-      flex flex-col justify-between space-y-8 p-4 pt-1.5
+      flex flex-col self-center justify-between space-y-8 p-4 pt-1.5
       text-white
       overflow-auto
     ">

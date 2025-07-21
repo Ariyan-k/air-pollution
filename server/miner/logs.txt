@@ -1,6 +1,6 @@
 
 
-Time: 3:17:23
+Time: 15:33:16
 Date: 21/7/2025
 
 Using key : KEY_1
@@ -184,6 +184,8 @@ Using key : KEY_1
 (178) entity added
 (179) entity added
 (180) entity added
+{"name":"FetchError","message":"request to http://api.openweathermap.org/data/2.5/air_pollution?lat=23.3315&lon=75.0374&appid=b5da48a676317663e941cd00001c4ddf failed, reason: socket hang up","stack":"FetchError: request to http://api.openweathermap.org/data/2.5/air_pollution?lat=23.3315&lon=75.0374&appid=b5da48a676317663e941cd00001c4ddf failed, reason: socket hang up\n    at ClientRequest.<anonymous> (file:///C:/Users/ARIYAN/CODE/Hackathon/airlytics/server/node_modules/node-fetch/src/index.js:108:11)\n    at ClientRequest.emit (node:events:519:28)\n    at Socket.socketOnEnd (node:_http_client:524:9)\n    at Socket.emit (node:events:531:35)\n    at endReadableNT (node:internal/streams/readable:1696:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)"}
+Entity couldn't be added, Retrying...
 (181) entity added
 All entities added.
 
