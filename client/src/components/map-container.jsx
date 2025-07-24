@@ -19,7 +19,8 @@ export default function Mapcontainer({ lat, lng, setReqCity, setReqTime }) {
     const tooltipIntervalRef = useRef(null);
 
     useEffect(() => {
-        mapRef.current = L.map('map', {worldCopyJump: true});
+        mapRef.current = L.map('map');
+
 
         mapRef.current.on('click', async (e) => {
             tooltipIntervalRef.current = null;
@@ -33,10 +34,8 @@ export default function Mapcontainer({ lat, lng, setReqCity, setReqTime }) {
             const clickLng = e.latlng.lng;
 
             const area = await fetchArea(clickLat, clickLng);
-            let displayName = area.display_name;
-            if (area.name) setReqCity(area.name);
-            else if (area.address.state_district) setReqCity(area.address.state_district);
-            else setReqCity("Unknown");
+            const displayName = area.display_name;
+            setReqCity((area.address.state_district));
 
             if (markerRef.current) {
                 mapRef.current.removeLayer(markerRef.current);
@@ -45,6 +44,7 @@ export default function Mapcontainer({ lat, lng, setReqCity, setReqTime }) {
             markerRef.current = L.marker([clickLat, clickLng], {opacity: 0});
             
             const data = await fetchWeather(e.latlng);
+
 
             const temp = `${data.current.temperature_2m}${data.current_units.temperature_2m}`;
             const apparentTemp = `${data.current.apparent_temperature}${data.current_units.apparent_temperature}`;

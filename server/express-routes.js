@@ -142,13 +142,14 @@ app.get('/localWeather', authMiddleware,  async (req, res) => {
     const lat = parseFloat(req.query.lat);
     const lng = parseFloat(req.query.lng);
     let response;
-    if (!isNaN(lat) && !isNaN(lng)) {
+    if (lat && lng) {
         try {
             response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,cloud_cover,wind_speed_10m,wind_direction_10m,wind_gusts_10m&timezone=auto`);
             response = await response.json();
-            return res.send(response);
+            res.send(response);
         }
         catch(err) {
+            console.log(err);
             res.json("Failed to fetch, please retry.");
         }
     }

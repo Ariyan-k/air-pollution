@@ -14,41 +14,37 @@ export default function Homepage() {
     const [reqTime, setReqTime] = useState("00:00"); //to set time of request in user request display.
     const [isValidAuth, setIsValidAuth] = useState("");
 
-    // useEffect(() => {
-    //     const authHeader = localStorage.getItem('Authorization');
-    //     const data = fetchHomepage(authHeader)
-    //         .then(msg => setIsValidAuth(msg));
-    // }, []);
+    useEffect(() => {
+        const authHeader = localStorage.getItem('Authorization');
+        const data = fetchHomepage(authHeader)
+            .then(msg => setIsValidAuth(msg));
+    }, []);
 
-    // if (isValidAuth === "authOK")
-    // return (
-    //     <div className="
-    //         lg:p-5
-    //         lg:static lg:flex lg:justify-center lg:items-center overflow-hidden gap-y-5 lg:gap-x-5 lg:flex-row
-    //         relative 
-    //     ">
-    //         <Mapcontainer lat={lat} lng={lng} setReqCity={setReqCity} setReqTime={setReqTime}/>
-    //         <div className="
-    //             w-full h-[40vh]
-    //             lg:w-auto lg:h-[80vh] 
-    //             flex flex-col items-baseline
-    //         ">
-    //             <div className="h-full lg:h-[80vh] flex flex-col-reverse justify-between lg:flex-col space-y-3">
-    //                 <Result reqCity={reqCity}/>
-    //                 <Userquerydisplay reqCity={reqCity} reqTime={reqTime}/>
-    //                 <Search setLat={setLat} setLng={setLng} setReqCity={setReqCity} setReqTime={setReqTime}/>
-    //             </div>
-    //         </div>
-    //     </div>
-    // )
-    // else return (
-    //     <div className="h-[60vh] w-[100vw] text-[15px] lg:text-[25px] bg-black text-white flex flex-col justify-center items-center space-y-10">
-    //         <div>{isValidAuth}</div>
-    //         <Link to={'/'} className="text-[10px] lg:text-[15px] text-blue-600">Redirect to Login page.</Link>
-    //     </div>
-    // )
-
+    if (isValidAuth === "authOK")
     return (
-        <p className="text-red-500 text-[15px] flex justify-center items-center">Airlytics is currently out of services.</p>
+        <div className="
+            lg:p-5
+            lg:static lg:flex lg:justify-center lg:items-center overflow-hidden gap-y-5 lg:gap-x-5 lg:flex-row
+            relative 
+        ">
+            <Mapcontainer lat={lat} lng={lng} setReqCity={setReqCity} setReqTime={setReqTime}/>
+            <div className="
+                w-full h-[40vh]
+                lg:w-auto lg:h-[80vh] 
+                flex flex-col items-baseline
+            ">
+                <div className="h-full lg:h-[80vh] flex flex-col-reverse justify-between lg:flex-col space-y-3">
+                    <Result reqCity={reqCity}/>
+                    <Userquerydisplay reqCity={reqCity} reqTime={reqTime}/>
+                    <Search setLat={setLat} setLng={setLng} setReqCity={setReqCity} setReqTime={setReqTime}/>
+                </div>
+            </div>
+        </div>
+    )
+    else return (
+        <div className="h-[60vh] w-[100vw] text-[15px] lg:text-[25px] bg-black text-white flex flex-col justify-center items-center space-y-10">
+            <div>{isValidAuth}</div>
+            <Link to={'/'} className="text-[10px] lg:text-[15px] text-blue-600">Redirect to Login page.</Link>
+        </div>
     )
 }
