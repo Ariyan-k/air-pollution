@@ -16,7 +16,8 @@ function fetchSignup(username, email, password) {
         .then(data => data.msg)
         .catch(err => {
             console.log("Signup err : ",err);
-            alert("Your device could not reach our backend, check your connection, disable VPN, or even try a different browser.");
+            // alert("Your device could not reach our backend, check your connection, disable VPN, or even try a different browser.");
+            alert("We are currently out of services, contact - instagram:@_ariyaankhan_");
         });
 }
 
@@ -35,7 +36,8 @@ function fetchLogin(username, password) {
         .then(data => data.msg)
         .catch(err => {
             console.log("Login err : ",err);
-            alert("Your device could not reach our backend, check your connection, disable VPN, or even try a different browser.");
+            // alert("Your device could not reach our backend, check your connection, disable VPN, or even try a different browser.");
+            alert("We are currently out of services, contact - instagram:@_ariyaankhan_");
         });
 }
 
