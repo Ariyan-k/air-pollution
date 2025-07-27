@@ -9,7 +9,6 @@ const JWT_KEY = process.env.JWT_KEY;
 import { signupValidation } from './validation.js';
 import { loginValidation } from './validation.js';
 import { User, initDB, Heatpoint } from './db.js';
-import fetch from 'node-fetch';
 import fs from 'fs';
 import callOpenweather from './miner/miner.js';
 
